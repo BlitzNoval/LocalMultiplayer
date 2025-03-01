@@ -719,7 +719,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1255546584}
   - component: {fileID: 1255546585}
-  - component: {fileID: 1255546586}
   m_Layer: 0
   m_Name: Player Manager
   m_TagString: Untagged
@@ -767,7 +766,7 @@ MonoBehaviour:
   m_JoinAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Join
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 912c9ace-b11c-4117-b2d3-6cf7000008c7
@@ -786,18 +785,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &1255546586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255546583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b11fbc1ccb002e1478220537e388dac6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1341670212
 GameObject:
   m_ObjectHideFlags: 0
