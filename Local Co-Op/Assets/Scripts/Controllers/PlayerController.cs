@@ -2,7 +2,6 @@ using UnityEngine;
 
 
     [CreateAssetMenu(fileName = "PlayerController", menuName = "InputController/PlayerController")]
-    
     public class PlayerController : InputController
     {
         public override bool RetrieveJumpInput()
@@ -13,5 +12,10 @@ using UnityEngine;
         public override float RetrieveMoveInput()
         {
             return Input.GetAxisRaw("Horizontal");
+        }
+
+        public override bool RetrieveJumpHoldInput()
+        {
+            return Input.GetButton("Jump");
         }
     }

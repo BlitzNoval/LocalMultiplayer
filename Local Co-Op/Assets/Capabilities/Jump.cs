@@ -1,90 +1,111 @@
 using UnityEngine;
 
     [RequireComponent(typeof(Controller))]
-
     public class Jump : MonoBehaviour
     {
-        [SerializeField, Range(0f, 10f)] private float jumpHeight = 3f;
-        [SerializeField, Range(0, 5)] private int maxAirJumps = 0;
-        [SerializeField, Range(0f, 5f)] private float downwardMovementMultiplier = 3f;
-        [SerializeField, Range(0f, 5f)] private float upwardMovementMultiplier = 1.7f;
+        [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
+        [SerializeField, Range(0, 5)] private int _maxAirJumps = 0;
+        [SerializeField, Range(0f, 5f)] private float _downwardMovementMultiplier = 3f;
+        [SerializeField, Range(0f, 5f)] private float _upwardMovementMultiplier = 1.7f;
+        [SerializeField, Range(0f, 0.3f)] private float _coyoteTime = 0.2f;
+        [SerializeField, Range(0f, 0.3f)] private float _jumpBufferTime = 0.2f;
 
-        private Controller controller;
-        private Rigidbody2D body;
-        private Ground ground;
-        private Vector2 velocity;
+        private Controller _controller;
+        private Rigidbody2D _body;
+        private Ground _ground;
+        private Vector2 _velocity;
 
-        private int jumpPhase;
-        private float defaultGravityScale;
-        private float jumpSpeed;
+        private int _jumpPhase;
+        private float _defaultGravityScale, _jumpSpeed, _coyoteCounter, _jumpBufferCounter;
 
-        private bool desiredJump, onGround;
+        private bool _desiredJump, _onGround, _isJumping;
 
 
         // Start is called before the first frame update
         void Awake()
         {
-            body = GetComponent<Rigidbody2D>();
-            ground = GetComponent<Ground>();
-            controller = GetComponent<Controller>();
+            _body = GetComponent<Rigidbody2D>();
+            _ground = GetComponent<Ground>();
+            _controller = GetComponent<Controller>();
 
-            defaultGravityScale = 1f;
+            _defaultGravityScale = 1f;
         }
 
         // Update is called once per frame
         void Update()
         {
-            desiredJump |= controller.input.RetrieveJumpInput();
+            _desiredJump |= _controller.input.RetrieveJumpInput();
         }
 
         private void FixedUpdate()
         {
-            onGround = ground.OnGround;
-            velocity = body.linearVelocity;
+            _onGround = _ground.OnGround;
+            _velocity = _body.linearVelocity;
 
-            if (onGround)
+            if (_onGround && _body.linearVelocity.y == 0)
             {
-                jumpPhase = 0;
+                _jumpPhase = 0;
+                _coyoteCounter = _coyoteTime;
+                _isJumping = false;
+            }
+            else
+            {
+                _coyoteCounter -= Time.deltaTime;
             }
 
-            if (desiredJump)
+            if (_desiredJump)
             {
-                desiredJump = false;
+                _desiredJump = false;
+                _jumpBufferCounter = _jumpBufferTime;
+            }
+            else if(!_desiredJump && _jumpBufferCounter > 0)
+            {
+                _jumpBufferCounter -= Time.deltaTime;
+            }
+
+            if(_jumpBufferCounter > 0)
+            {
                 JumpAction();
             }
 
-            if (body.linearVelocity.y > 0)
+            if (_controller.input.RetrieveJumpHoldInput() && _body.linearVelocity.y > 0)
             {
-                body.gravityScale = upwardMovementMultiplier;
+                _body.gravityScale = _upwardMovementMultiplier;
             }
-            else if (body.linearVelocity.y < 0)
+            else if (!_controller.input.RetrieveJumpHoldInput() || _body.linearVelocity.y < 0)
             {
-                body.gravityScale = downwardMovementMultiplier;
+                _body.gravityScale = _downwardMovementMultiplier;
             }
-            else if(body.linearVelocity.y == 0)
+            else if(_body.linearVelocity.y == 0)
             {
-                body.gravityScale = defaultGravityScale;
+                _body.gravityScale = _defaultGravityScale;
             }
 
-            body.linearVelocity = velocity;
+            _body.linearVelocity = _velocity;
         }
         private void JumpAction()
         {
-            if (onGround || jumpPhase < maxAirJumps)
+            if (_coyoteCounter > 0f || (_jumpPhase < _maxAirJumps && _isJumping))
             {
-                jumpPhase += 1;
-                
-                jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * jumpHeight);
-                
-                if (velocity.y > 0f)
+                if(_isJumping)
                 {
-                    jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
+                    _jumpPhase += 1;
                 }
-                else if (velocity.y < 0f)
+
+                _jumpBufferCounter = 0;
+                _coyoteCounter = 0;
+                _jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * _jumpHeight);
+                _isJumping = true;
+                
+                if (_velocity.y > 0f)
                 {
-                    jumpSpeed += Mathf.Abs(body.linearVelocity.y);
+                    _jumpSpeed = Mathf.Max(_jumpSpeed - _velocity.y, 0f);
                 }
-                velocity.y += jumpSpeed;
+                else if (_velocity.y < 0f)
+                {
+                    _jumpSpeed += Mathf.Abs(_body.linearVelocity.y);
+                }
+                _velocity.y += _jumpSpeed;
             }
         }
     }

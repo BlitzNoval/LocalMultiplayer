@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
     public class Ground : MonoBehaviour
     {
         public bool OnGround { get; private set; }
@@ -48,4 +47,3 @@ using UnityEngine;
             }
         }
     }
-
