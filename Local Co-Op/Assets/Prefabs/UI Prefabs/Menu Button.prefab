@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2547943119430670651}
   - component: {fileID: 8584708200930483256}
-  - component: {fileID: 4837317743256783493}
   - component: {fileID: 6294599854180206136}
   - component: {fileID: 6348845488274050865}
   m_Layer: 5
@@ -48,23 +47,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3771709456982707312}
   m_CullTransparentMesh: 1
---- !u!114 &4837317743256783493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3771709456982707312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e244ce64c24a15e44a2f12b2e3220d1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  simulatePressed: 0
-  simulateSelected: 0
-  simulateDisabled: 0
-  simulateHighlighted: 0
-  currentState: Normal
 --- !u!114 &6294599854180206136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6294599854180206136}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9149558086571428283
 GameObject:
   m_ObjectHideFlags: 0
