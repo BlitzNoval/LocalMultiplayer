@@ -1,6 +1,6 @@
 using UnityEngine;
 
-    [RequireComponent(typeof(Controller))]
+ [RequireComponent(typeof(Controller))]
     public class Jump : MonoBehaviour
     {
         [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
@@ -12,7 +12,7 @@ using UnityEngine;
 
         private Controller _controller;
         private Rigidbody2D _body;
-        private Ground _ground;
+        private CollisionDataRetriever _ground;
         private Vector2 _velocity;
 
         private int _jumpPhase;
@@ -25,7 +25,7 @@ using UnityEngine;
         void Awake()
         {
             _body = GetComponent<Rigidbody2D>();
-            _ground = GetComponent<Ground>();
+            _ground = GetComponent<CollisionDataRetriever>();
             _controller = GetComponent<Controller>();
 
             _defaultGravityScale = 1f;
