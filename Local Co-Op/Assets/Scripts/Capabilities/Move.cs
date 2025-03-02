@@ -1,12 +1,12 @@
 using UnityEngine;
 
-       [RequireComponent(typeof(Controller))]
+        [RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
     public class Move : MonoBehaviour
     {
         [SerializeField, Range(0f, 100f)] private float _maxSpeed = 4f;
         [SerializeField, Range(0f, 100f)] private float _maxAcceleration = 35f;
         [SerializeField, Range(0f, 100f)] private float _maxAirAcceleration = 20f;
-        [SerializeField, Range(0.05f, 0.5f)] private float _wallStickTime = 0.25f;
+        
 
         private Controller _controller;
         private Vector2 _direction, _desiredVelocity, _velocity;
@@ -14,7 +14,7 @@ using UnityEngine;
         private CollisionDataRetriever _collisionDataRetriever;
         private WallInteractor _wallInteractor;
 
-        private float _maxSpeedChange, _acceleration, _wallStickCounter;
+        private float _maxSpeedChange, _acceleration;
         private bool _onGround;
 
         private void Awake()
@@ -40,28 +40,6 @@ using UnityEngine;
             _maxSpeedChange = _acceleration * Time.deltaTime;
             _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
 
-            #region Wall Stick
-            if(_collisionDataRetriever.OnWall && !_collisionDataRetriever.OnGround && !_wallInteractor.WallJumping)
-            {
-                if(_wallStickCounter > 0)
-                {
-                    _velocity.x = 0;
-
-                    if(_controller.input.RetrieveMoveInput() == _collisionDataRetriever.ContactNormal.x)
-                    {
-                        _wallStickCounter -= Time.deltaTime;
-                    }
-                    else
-                    {
-                        _wallStickCounter = _wallStickTime;
-                    }
-                }
-                else
-                {
-                    _wallStickCounter = _wallStickTime;
-                }
-            }
-            #endregion
 
             _body.linearVelocity = _velocity;
         }

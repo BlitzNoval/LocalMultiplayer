@@ -1,6 +1,6 @@
 using UnityEngine;
 
- [RequireComponent(typeof(Controller))]
+  [RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
     public class Jump : MonoBehaviour
     {
         [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
@@ -68,11 +68,11 @@ using UnityEngine;
                 JumpAction();
             }
 
-            if (_controller.input.RetrieveJumpHoldInput() && _body.linearVelocity.y > 0)
+            if (_controller.input.RetrieveJumpInput() && _body.linearVelocity.y > 0)
             {
                 _body.gravityScale = _upwardMovementMultiplier;
             }
-            else if (!_controller.input.RetrieveJumpHoldInput() || _body.linearVelocity.y < 0)
+            else if (!_controller.input.RetrieveJumpInput() || _body.linearVelocity.y < 0)
             {
                 _body.gravityScale = _downwardMovementMultiplier;
             }
@@ -94,7 +94,7 @@ using UnityEngine;
 
                 _jumpBufferCounter = 0;
                 _coyoteCounter = 0;
-                _jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * _jumpHeight);
+                _jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * _jumpHeight * _upwardMovementMultiplier);
                 _isJumping = true;
                 
                 if (_velocity.y > 0f)
