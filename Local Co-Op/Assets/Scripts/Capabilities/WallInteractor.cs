@@ -18,7 +18,7 @@ using UnityEngine;
         private Controller _controller;
 
         private Vector2 _velocity;
-        private bool _onWall, _onGround, _desiredJump;
+        private bool _onWall, _onGround, _desiredJump, _isJumpReset;
         private float _wallDirectionX,  _wallStickCounter;
 
         // Start is called before the first frame update
@@ -27,15 +27,16 @@ using UnityEngine;
             _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
             _body = GetComponent<Rigidbody2D>();
             _controller = GetComponent<Controller>();
+
+            _isJumpReset = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if(_onWall && !_onGround)
-            {
-                _desiredJump |= _controller.input.RetrieveJumpInput();
-            }
+
+                _desiredJump = _controller.input.RetrieveJumpInput();
+        
         }
 
         private void FixedUpdate()
@@ -62,7 +63,8 @@ using UnityEngine;
                 {
                     _velocity.x = 0;
 
-                    if(_controller.input.RetrieveMoveInput() == _collisionDataRetriever.ContactNormal.x)
+                    if(_controller.input.RetrieveMoveInput() != 0 &&
+   Mathf.Sign(_controller.input.RetrieveMoveInput()) == Mathf.Sign(_collisionDataRetriever.ContactNormal.x))
                     {
                         _wallStickCounter -= Time.deltaTime;
                     }
@@ -85,26 +87,39 @@ using UnityEngine;
                 WallJumping = false;
             }
 
-            if(_desiredJump)
+             if(_onWall && !_onGround)
             {
-                if(-_wallDirectionX == _controller.input.RetrieveMoveInput())
-                {
-                    _velocity = new Vector2(_wallJumpClimb.x * _wallDirectionX, _wallJumpClimb.y);
-                    WallJumping = true;
-                    _desiredJump = false;
-                }
-                else if(_controller.input.RetrieveMoveInput() == 0)
+
+            if(_desiredJump && _isJumpReset)
+            {
+                 if(_controller.input.RetrieveMoveInput() == 0)
                 {
                     _velocity = new Vector2(_wallJumpBounce.x * _wallDirectionX, _wallJumpBounce.y);
                     WallJumping = true;
                     _desiredJump = false;
+                     _isJumpReset = false;
                 }
+
+                else if(Mathf.Sign( -_wallDirectionX) == Mathf.Sign(_controller.input.RetrieveMoveInput()))
+                {
+                    _velocity = new Vector2(_wallJumpClimb.x * _wallDirectionX, _wallJumpClimb.y);
+                    WallJumping = true;
+                    _desiredJump = false;
+                     _isJumpReset = false;
+                    
+                }
+            
                 else
                 {
                     _velocity = new Vector2(_wallJumpLeap.x * _wallDirectionX, _wallJumpLeap.y);
                     WallJumping = true;
                     _desiredJump = false;
+                     _isJumpReset = false;
                 }
+            }
+            else if (!_desiredJump){
+                _isJumpReset = true;
+            }
             }
             #endregion
 
@@ -116,6 +131,7 @@ using UnityEngine;
         private void OnCollisionEnter2D(Collision2D collision)
         {
             _collisionDataRetriever.EvaluateCollision(collision);
+             _isJumpReset = false;
 
             if(_collisionDataRetriever.OnWall && !_collisionDataRetriever.OnGround && WallJumping)
             {

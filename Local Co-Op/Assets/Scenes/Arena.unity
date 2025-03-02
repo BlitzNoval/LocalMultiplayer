@@ -930,10 +930,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cec78228536cbf42944c75a94ccfa5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 15
+  _maxSpeed: 10
   _maxAcceleration: 50
   _maxAirAcceleration: 20
-  _wallStickTime: 0.25
 --- !u!114 &183716123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -960,7 +959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpHeight: 3
-  _maxAirJumps: 2
+  _maxAirJumps: 0
   _downwardMovementMultiplier: 3
   _upwardMovementMultiplier: 1.7
   _coyoteTime: 0.2
@@ -977,10 +976,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b835bb6ffb300b740a1ccddb15d51bfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wallSlideMaxSpeed: 2.1
+  _wallSlideMaxSpeed: 2
   _wallJumpClimb: {x: 4, y: 12}
   _wallJumpBounce: {x: 10.7, y: 10}
   _wallJumpLeap: {x: 14, y: 12}
+  _wallStickTime: 0.5
 --- !u!114 &183716126
 MonoBehaviour:
   m_ObjectHideFlags: 0
