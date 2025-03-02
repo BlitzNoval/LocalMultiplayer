@@ -22,15 +22,22 @@ using UnityEngine;
 
 
         // Start is called before the first frame update
-        void Awake()
-        {
-            _body = GetComponent<Rigidbody2D>();
-            _ground = GetComponent<CollisionDataRetriever>();
-            _controller = GetComponent<Controller>();
+       private void Awake()
+{
+    _body = GetComponent<Rigidbody2D>();
+    _ground = GetComponent<CollisionDataRetriever>();
+    _controller = GetComponent<Controller>(); // This should always exist due to RequireComponent
 
-            _isJumpReset = true;          
-            _defaultGravityScale = 1f;
-        }
+    _isJumpReset = true;
+    _defaultGravityScale = 1f;
+
+    // 🔹 Extra safety check to prevent crashes
+    if (_controller == null || _controller.input == null)
+    {
+        Debug.LogError("Jump.cs: Controller or InputController is missing! Make sure the Player prefab has the correct input setup.");
+    }
+}
+
 
         // Update is called once per frame
         void Update()

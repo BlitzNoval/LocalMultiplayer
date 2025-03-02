@@ -18,12 +18,20 @@ using UnityEngine;
         private bool _onGround;
 
         private void Awake()
-        {
-            _body = GetComponent<Rigidbody2D>();
-            _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
-            _controller = GetComponent<Controller>();
-            _wallInteractor = GetComponent<WallInteractor>();
-        }
+{
+    // Get necessary components from the GameObject
+    _body = GetComponent<Rigidbody2D>();
+    _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
+    _controller = GetComponent<Controller>(); // This should always exist because of RequireComponent
+    _wallInteractor = GetComponent<WallInteractor>();
+
+    // 🔹 Extra safety check (just in case something is wrong)
+    if (_controller == null || _controller.input == null)
+    {
+        Debug.LogError("Controller or InputController is missing! Make sure the Player prefab has the correct input setup.");
+    }
+}
+
 
         private void Update()
         {

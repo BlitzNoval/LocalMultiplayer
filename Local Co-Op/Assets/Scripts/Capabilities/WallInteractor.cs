@@ -22,14 +22,21 @@ using UnityEngine;
         private float _wallDirectionX,  _wallStickCounter;
 
         // Start is called before the first frame update
-        void Start()
-        {
-            _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
-            _body = GetComponent<Rigidbody2D>();
-            _controller = GetComponent<Controller>();
+        private void Awake()
+{
+    _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
+    _body = GetComponent<Rigidbody2D>();
+    _controller = GetComponent<Controller>(); // Should always exist because of RequireComponent
 
-            _isJumpReset = true;
-        }
+    _isJumpReset = true;
+
+    // 🔹 Extra safety check to prevent crashes
+    if (_controller == null || _controller.input == null)
+    {
+        Debug.LogError("WallInteractor: Controller or InputController is missing! Make sure the Player prefab has the correct input setup.");
+    }
+}
+
 
         // Update is called once per frame
         void Update()
