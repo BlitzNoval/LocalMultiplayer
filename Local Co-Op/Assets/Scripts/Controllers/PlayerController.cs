@@ -23,12 +23,16 @@ public class PlayerController : InputController
     }
 
     private void OnDisable()
+{
+    if (_inputActions != null)  // Check before using this function
     {
         _inputActions.Gameplay.Disable();
         _inputActions.Gameplay.Jump.started -= JumpStarted;
         _inputActions.Gameplay.Jump.canceled -= JumpCanceled;
         _inputActions = null;
     }
+}
+
 
     private void JumpStarted(InputAction.CallbackContext obj)
     {
