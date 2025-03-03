@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 1452731618879136631}
   - component: {fileID: 227870280221078221}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Avatar Panels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

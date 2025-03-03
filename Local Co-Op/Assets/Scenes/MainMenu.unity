@@ -351,6 +351,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 614812254798998989, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 39
+      objectReference: {fileID: 0}
     - target: {fileID: 1602450004597054717, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: m_Name
       value: Main Menu
@@ -402,6 +406,10 @@ PrefabInstance:
     - target: {fileID: 4527009230504420856, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112321167717873554, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: m_text
+      value: Ultimate tag champions
       objectReference: {fileID: 0}
     - target: {fileID: 6637288408321790882, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: m_Pivot.x

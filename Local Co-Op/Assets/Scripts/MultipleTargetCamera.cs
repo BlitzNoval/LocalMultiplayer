@@ -1,10 +1,10 @@
-using System.Collections.Generic;  // Added this for List<T>
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class MultipleTargetCamera : MonoBehaviour
 {
-    public List<Transform> targets;
+    public List<Transform> targets = new List<Transform>();
 
     public Vector3 offset;
     public float smoothTime = .5f;
@@ -19,15 +19,35 @@ public class MultipleTargetCamera : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
+        UpdateTargets(); // Initial population of the targets list
     }
 
     void LateUpdate()
     {
+        UpdateTargets(); // Continuously check for new players
+
         if (targets.Count == 0)
             return;
 
         Move();
         Zoom();
+    }
+
+    void UpdateTargets()
+    {
+        targets.Clear(); // Reset the list to avoid duplicates
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player1");
+        foreach (GameObject player in players)
+        {
+            targets.Add(player.transform);
+        }
+
+        players = GameObject.FindGameObjectsWithTag("Player2");
+        foreach (GameObject player in players)
+        {
+            targets.Add(player.transform);
+        }
     }
 
     void Zoom()
@@ -45,10 +65,12 @@ public class MultipleTargetCamera : MonoBehaviour
 
     float GetGreatestDistance()
     {
+        if (targets.Count == 0) return 0f;
+
         var bounds = new Bounds(targets[0].position, Vector3.zero);
-        for (int i = 1; i < targets.Count; i++) // Start from 1 to avoid redundant encapsulation
+        for (int i = 1; i < targets.Count; i++)
         {
-            bounds.Encapsulate(targets[i].position); // Fixed syntax error
+            bounds.Encapsulate(targets[i].position);
         }
 
         return bounds.size.x;
@@ -62,9 +84,9 @@ public class MultipleTargetCamera : MonoBehaviour
         }
 
         var bounds = new Bounds(targets[0].position, Vector3.zero);
-        for (int i = 1; i < targets.Count; i++) // Start from 1
+        for (int i = 1; i < targets.Count; i++)
         {
-            bounds.Encapsulate(targets[i].position); // Fixed syntax error
+            bounds.Encapsulate(targets[i].position);
         }
 
         return bounds.center;
