@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wallSlideMaxSpeed: 5
-  _wallJumpClimb: {x: 6, y: 20}
+  _wallJumpClimb: {x: 10, y: 20}
   _wallJumpBounce: {x: 20, y: 20}
   _wallJumpLeap: {x: 20, y: 12}
   _wallStickTime: 0.5
