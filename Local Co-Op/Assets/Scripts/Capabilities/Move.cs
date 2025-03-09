@@ -4,9 +4,10 @@
         public class Move : MonoBehaviour
         {
             
-        [SerializeField, Range(0f, 100f)] private float _maxSpeed = 4f;
-        [SerializeField, Range(0f, 100f)] private float _maxAcceleration = 35f;
-        [SerializeField, Range(0f, 100f)] private float _maxAirAcceleration = 20f;
+        [SerializeField, Range(0f, 100f)] private float _maxSpeed = 8f; // Increase from 4f to 8f
+[SerializeField, Range(0f, 100f)] private float _maxAcceleration = 50f; // Increase from 35f
+[SerializeField, Range(0f, 100f)] private float _maxAirAcceleration = 30f; // Increase from 20f
+[SerializeField, Range(0f, 100f)] private float _instantStopThreshold = 0.1f; 
         [SerializeField] private Transform _spriteTransform; // Assign in inspector
 [SerializeField, Range(0f, 15f)] private float _tiltAngle = 8f; // Max rotation when moving
 [SerializeField, Range(1f, 20f)] private float _tiltSpeed = 10f; // How fast to tilt
@@ -88,26 +89,32 @@ private int _lastMoveDirection = 0; // Last move direction
         }
 
         private void FixedUpdate()
+{
+    _onGround = _collisionDataRetriever.OnGround;
+    _velocity = _body.linearVelocity;
+
+    // Handle ground movement
+    if (_onGround)
+    {
+        // If trying to stop (no input) and moving slowly, come to a complete stop
+        if (Mathf.Abs(_direction.x) < 0.01f && Mathf.Abs(_velocity.x) < _instantStopThreshold)
         {
-            _onGround = _collisionDataRetriever.OnGround;
-            _velocity = _body.linearVelocity;
-
-            // Choose acceleration or deceleration based on input direction
-            float currentAcceleration;
-            if (_desiredVelocity.x == 0 || Mathf.Sign(_velocity.x) != Mathf.Sign(_desiredVelocity.x))
-            {
-                // We're stopping or changing direction - use deceleration
-                currentAcceleration = _onGround ? _maxDeceleration : _maxAirDeceleration;
-            }
-            else
-            {
-                // We're accelerating in the same direction - use acceleration
-                currentAcceleration = _onGround ? _maxAcceleration : _maxAirAcceleration;
-            }
-            
-            _maxSpeedChange = currentAcceleration * Time.deltaTime;
-            _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
-
-            _body.linearVelocity = _velocity;
+            _velocity.x = 0f;
         }
+        else
+        {
+            // Normal acceleration
+            _maxSpeedChange = _maxAcceleration * Time.deltaTime;
+            _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
+        }
+    }
+    else
+    {
+        // Air movement
+        _maxSpeedChange = _maxAirAcceleration * Time.deltaTime;
+        _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
+    }
+
+    _body.linearVelocity = _velocity;
+}
     }

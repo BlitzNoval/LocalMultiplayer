@@ -305,6 +305,13 @@ MonoBehaviour:
   _maxSpeed: 20
   _maxAcceleration: 100
   _maxAirAcceleration: 100
+  _instantStopThreshold: 0.1
+  _spriteTransform: {fileID: 467863142908839898}
+  _tiltAngle: 8
+  _tiltSpeed: 10
+  _initialBoostMultiplier: 1.2
+  _initialBoostTime: 0.15
+  _airControlFactor: 0.8
   _maxDeceleration: 100
   _maxAirDeceleration: 100
 --- !u!114 &4610877841099924255
@@ -319,14 +326,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 964b5deda26eceb45b47a23ca44c9893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpHeight: 5
+  _jumpHeight: 3
   _maxAirJumps: 0
-  _downwardMovementMultiplier: 3
-  _upwardMovementMultiplier: 1.7
+  _downwardGravityMultiplier: 6
+  _upwardGravityMultiplier: 2.5
   _coyoteTime: 0.2
   _jumpBufferTime: 0.2
-  _jumpCutMultiplier: 0.5
-  _fallMultiplier: 1
 --- !u!114 &3830289785141969099
 MonoBehaviour:
   m_ObjectHideFlags: 0
