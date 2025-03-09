@@ -302,8 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cec78228536cbf42944c75a94ccfa5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 10
-  _maxAcceleration: 50
+  _maxSpeed: 25
+  _maxAcceleration: 100
   _maxAirAcceleration: 20
 --- !u!114 &4610877841099924255
 MonoBehaviour:
@@ -317,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 964b5deda26eceb45b47a23ca44c9893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpHeight: 3
+  _jumpHeight: 4
   _maxAirJumps: 0
   _downwardMovementMultiplier: 3
   _upwardMovementMultiplier: 1.7
@@ -342,15 +342,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4790467583371328561}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b835bb6ffb300b740a1ccddb15d51bfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wallSlideMaxSpeed: 2
-  _wallJumpClimb: {x: 4, y: 12}
-  _wallJumpBounce: {x: 10.7, y: 10}
-  _wallJumpLeap: {x: 14, y: 12}
+  _wallSlideMaxSpeed: 5
+  _wallJumpClimb: {x: 6, y: 20}
+  _wallJumpBounce: {x: 20, y: 20}
+  _wallJumpLeap: {x: 20, y: 12}
   _wallStickTime: 0.5
 --- !u!114 &460942384311707447
 MonoBehaviour:
