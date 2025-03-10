@@ -1486,7 +1486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932314f0a3cee224c9f05357785aa077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 100
+  scrollSpeed: 500
   targetRect: {fileID: 1744928777}
   duplicateRect: {fileID: 265292966}
 --- !u!114 &1006936361
@@ -2495,6 +2495,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 412
       objectReference: {fileID: 0}
+    - target: {fileID: 186217889297693658, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 186217889297693658, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 186217889297693658, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 409190513159175450, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 3.2089844
@@ -3020,6 +3032,10 @@ PrefabInstance:
     - target: {fileID: 8289576994168875447, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -251.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 8351311264180853047, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
+      propertyPath: scrollSpeed
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 8351311264180853047, guid: e2bf461c15d209e49a2e030757aa2bb4, type: 3}
       propertyPath: normalScrollSpeed
