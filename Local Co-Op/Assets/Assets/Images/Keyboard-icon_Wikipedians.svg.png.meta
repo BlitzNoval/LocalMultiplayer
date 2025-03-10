@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Keyboard-icon_Wikipedians.svg_0: -4455697187554055062
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
