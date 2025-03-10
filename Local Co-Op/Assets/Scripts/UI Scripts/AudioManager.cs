@@ -6,9 +6,14 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
+    [Header("Music Settings")]
+    [SerializeField] private AudioClip initialSong;
     [SerializeField] private List<AudioClip> songs = new List<AudioClip>();
+    
     private AudioSource audioSource;
     private string currentSceneName;
+    private bool initialSongPlayed = false;
+    private bool isApplicationPaused = false;
 
     void Awake()
     {
@@ -16,22 +21,38 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            audioSource = gameObject.GetComponent<AudioSource>();
-
+            audioSource = GetComponent<AudioSource>();
+            
             if (audioSource == null)
             {
                 audioSource = gameObject.AddComponent<AudioSource>();
                 audioSource.playOnAwake = false;
                 audioSource.loop = false;
             }
-
+            
             SceneManager.sceneLoaded += OnSceneLoaded;
             LoadVolumeSettings();
-            PlayNextSong();
+            PlayNextSong(true);
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        isApplicationPaused = pauseStatus;
+    }
+
+    void Update()
+    {
+        if (!isApplicationPaused && !audioSource.isPlaying)
+        {
+            if (audioSource.clip == null || audioSource.time >= audioSource.clip.length - 0.1f)
+            {
+                PlayNextSong();
+            }
         }
     }
 
@@ -41,20 +62,44 @@ public class AudioManager : MonoBehaviour
         ApplySceneVolume();
     }
 
-    private void LoadVolumeSettings()
+    void LoadVolumeSettings()
     {
         if (!PlayerPrefs.HasKey(currentSceneName))
         {
-            PlayerPrefs.SetFloat(currentSceneName, 1.0f);  // Default volume if not set
+            PlayerPrefs.SetFloat(currentSceneName, 1.0f);
         }
         ApplySceneVolume();
     }
 
-    private void ApplySceneVolume()
+    void ApplySceneVolume()
     {
         if (PlayerPrefs.HasKey(currentSceneName))
         {
             audioSource.volume = PlayerPrefs.GetFloat(currentSceneName);
+        }
+    }
+
+    void PlayNextSong(bool forceInitial = false)
+    {
+        if (forceInitial && initialSong != null)
+        {
+            audioSource.clip = initialSong;
+            audioSource.Play();
+            initialSongPlayed = true;
+            return;
+        }
+
+        if (!initialSongPlayed && initialSong != null)
+        {
+            audioSource.clip = initialSong;
+            audioSource.Play();
+            initialSongPlayed = true;
+        }
+        else if (songs.Count > 0)
+        {
+            int randomIndex = Random.Range(0, songs.Count);
+            audioSource.clip = songs[randomIndex];
+            audioSource.Play();
         }
     }
 
@@ -64,45 +109,9 @@ public class AudioManager : MonoBehaviour
         audioSource.volume = volume;
     }
 
-    void PlayNextSong()
-    {
-        if (songs.Count == 0) return;
-
-        if (!audioSource.isPlaying)
-        {
-            int randomIndex = Random.Range(0, songs.Count);
-            audioSource.clip = songs[randomIndex];
-            audioSource.Play();
-        }
-    }
-
-    void Update()
-    {
-        if (!audioSource.isPlaying)
-        {
-            PlayNextSong();
-        }
-
-        // Check if the "J" key is pressed to reset volume settings
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            ResetVolumeSettings();
-        }
-    }
-
     public void SetSongs(List<AudioClip> newSongs)
     {
         songs = newSongs;
         PlayNextSong();
-    }
-
-    // Method to reset the volume settings for the current scene
-    public void ResetVolumeSettings()
-    {
-        if (PlayerPrefs.HasKey(currentSceneName))
-        {
-            PlayerPrefs.DeleteKey(currentSceneName);  // Reset the saved volume for this scene
-            ApplySceneVolume();  // Apply the default volume (which is 1.0f)
-        }
     }
 }

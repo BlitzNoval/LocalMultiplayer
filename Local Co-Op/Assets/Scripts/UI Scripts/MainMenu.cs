@@ -47,25 +47,53 @@ public class MainMenu : MonoBehaviour
     }
 
     // 🟢 Smooth Scale Animation for UI Panels
+    
     private IEnumerator AnimatePanel(GameObject panel, bool opening)
     {
-        float duration = 0.3f;
-        float time = 0f;
-        Vector3 startScale = opening ? Vector3.zero : Vector3.one;
-        Vector3 endScale = opening ? Vector3.one : Vector3.zero;
-
-        if (opening) panel.SetActive(true);
-
-        while (time < duration)
+        Animation anim = panel.GetComponent<Animation>();
+        if (anim != null && anim.clip != null)
         {
-            panel.transform.localScale = Vector3.Lerp(startScale, endScale, time / duration);
-            time += Time.deltaTime;
-            yield return null;
+            string clipName = anim.clip.name;
+            if (opening)
+            {
+                panel.SetActive(true);
+                anim[clipName].speed = 1; // Play forward
+                anim[clipName].time = 0f;
+                anim.Play(clipName);
+            }
+            else
+            {
+                anim[clipName].speed = -1; // Play backward
+                anim[clipName].time = anim[clipName].length;
+                anim.Play(clipName);
+            }
+
+            // Wait for the animation duration
+            yield return new WaitForSeconds(anim.clip.length);
+
+            if (!opening)
+                panel.SetActive(false);
         }
+        else
+        {
+            // Fallback to scaling if no animation found
+            float duration = 0.3f;
+            float time = 0f;
+            Vector3 startScale = opening ? Vector3.zero : Vector3.one;
+            Vector3 endScale = opening ? Vector3.one : Vector3.zero;
 
-        panel.transform.localScale = endScale;
+            if (opening) panel.SetActive(true);
 
-        if (!opening) panel.SetActive(false);
+            while (time < duration)
+            {
+                panel.transform.localScale = Vector3.Lerp(startScale, endScale, time / duration);
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            panel.transform.localScale = endScale;
+            if (!opening) panel.SetActive(false);
+        }
     }
 
     // 🔴 Button Press Effect (Shrink & Expand)
