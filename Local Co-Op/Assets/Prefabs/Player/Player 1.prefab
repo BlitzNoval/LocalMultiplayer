@@ -307,7 +307,7 @@ MonoBehaviour:
   _maxAirAcceleration: 100
   _instantStopThreshold: 0.1
   _spriteTransform: {fileID: 467863142908839898}
-  _tiltAngle: 8
+  _tiltAngle: 1
   _tiltSpeed: 10
   _initialBoostMultiplier: 1.2
   _initialBoostTime: 0.15
