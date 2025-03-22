@@ -16,26 +16,23 @@ public class CharacterSelectManager : MonoBehaviour
 
     [Header("Characters")]
     public CharacterData[] characters; 
-
     private bool[] isCharacterTaken;
-
     private int player1Index = 0;
     private int player2Index = 0;
 
     private PlayerSelectState p1State = PlayerSelectState.Selecting;
     private PlayerSelectState p2State = PlayerSelectState.Selecting;
 
-    [Header("UI - Character Indicators")]
+    [Header("UI - Character Indicators (Top Panels)")]
     public GameObject[] p1SelectIndicators;
     public GameObject[] p2SelectIndicators;
 
-    [Header("UI - Bottom Panels (Player1)")]
+    [Header("UI - Bottom Panels (Player Prompts & Info)")]
     public Image player1Image;
     public TMP_Text player1NameText;
     public TMP_Text player1StatusText;
     public TMP_Text player1PromptText;
 
-    [Header("UI - Bottom Panels (Player2)")]
     public Image player2Image;
     public TMP_Text player2NameText;
     public TMP_Text player2StatusText;
@@ -66,7 +63,6 @@ public class CharacterSelectManager : MonoBehaviour
     private void Awake()
     {
         isCharacterTaken = new bool[characters.Length];
-
     }
 
     private void Start()
@@ -78,17 +74,16 @@ public class CharacterSelectManager : MonoBehaviour
         p1SelectingRoutine = StartCoroutine(AnimateSelectingText(player1StatusText, 1));
         p2SelectingRoutine = StartCoroutine(AnimateSelectingText(player2StatusText, 2));
 
+        player1PromptText.text = $"Press ({selectKeyP1}) to select character!";
+        player2PromptText.text = $"Press ({selectKeyP2}) to select character!";
 
-    Debug.Log("Player1Input: " + (player1Input != null ? "Assigned" : "NULL"));
-    Debug.Log("Player2Input: " + (player2Input != null ? "Assigned" : "NULL"));
+        Debug.Log("Player1Input: " + (player1Input != null ? "Assigned" : "NULL"));
+        Debug.Log("Player2Input: " + (player2Input != null ? "Assigned" : "NULL"));
 
-    if (player1Input != null)
-        Debug.Log("Player1 Default Map: " + player1Input.currentActionMap.name);
-    
-    if (player2Input != null)
-        Debug.Log("Player2 Default Map: " + player2Input.currentActionMap.name);
-
-
+        if (player1Input != null)
+            Debug.Log("Player1 Default Map: " + player1Input.currentActionMap.name);
+        if (player2Input != null)
+            Debug.Log("Player2 Default Map: " + player2Input.currentActionMap.name);
     }
 
     private void Update()
@@ -121,34 +116,37 @@ public class CharacterSelectManager : MonoBehaviour
         {
             GameManager.Instance.player1CharacterName = characters[player1Index].characterName;
             GameManager.Instance.player2CharacterName = characters[player2Index].characterName;
-
-            StartCoroutine(FadeOutAndLoadScene("ObstaclePlacementScene"));
+            StartCoroutine(FadeOutAndLoadScene("ObstaclePlacement"));
         }
     }
 
     private void HandleHorizontalNav(ref int currentIndex, float moveX, int playerNumber)
     {
         PlayerSelectState state = (playerNumber == 1) ? p1State : p2State;
-        if (state == PlayerSelectState.Ready)
+        if (state != PlayerSelectState.Selecting)
             return;
 
         if (Mathf.Abs(moveX) > 0.5f)
         {
+            int dir = (moveX > 0) ? 1 : -1;
             float lastInput = (playerNumber == 1) ? p1LastInputTime : p2LastInputTime;
             if (Time.time - lastInput > inputCooldown)
             {
-                int dir = (moveX > 0) ? 1 : -1;
                 currentIndex = GetNextAvailableCharacterIndex(currentIndex, dir);
 
                 if (playerNumber == 1)
                 {
                     UpdatePlayer1UI();
                     p1LastInputTime = Time.time;
+                    player1PromptText.text = $"Press ({selectKeyP1}) to select character!";
+                    AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>(), dir);
                 }
                 else
                 {
                     UpdatePlayer2UI();
                     p2LastInputTime = Time.time;
+                    player2PromptText.text = $"Press ({selectKeyP2}) to select character!";
+                    AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>(), dir);
                 }
                 UpdateIndicatorUI();
             }
@@ -161,16 +159,13 @@ public class CharacterSelectManager : MonoBehaviour
         int loopCount = 0;
         do
         {
-            newIndex = newIndex + direction;
+            newIndex += direction;
             if (newIndex < 0) newIndex = characters.Length - 1;
             if (newIndex >= characters.Length) newIndex = 0;
-
             loopCount++;
             if (loopCount > characters.Length)
                 break;
-
         } while (isCharacterTaken[newIndex]);
-
         return newIndex;
     }
 
@@ -181,29 +176,28 @@ public class CharacterSelectManager : MonoBehaviour
             switch (p1State)
             {
                 case PlayerSelectState.Selecting:
-
                     if (!isCharacterTaken[player1Index])
                     {
-                        isCharacterTaken[player1Index] = true; 
+                        isCharacterTaken[player1Index] = true;
                         p1State = PlayerSelectState.Selected;
-                        
-
-                        if (p1SelectingRoutine != null) StopCoroutine(p1SelectingRoutine);
+                        if (p1SelectingRoutine != null)
+                            StopCoroutine(p1SelectingRoutine);
                         player1StatusText.text = "Selected";
                         player1PromptText.text = $"Press ({readyKeyP1}) to Ready!";
+                        AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     }
                     break;
                 case PlayerSelectState.Selected:
                     p1State = PlayerSelectState.Ready;
                     player1StatusText.text = "Ready";
                     player1PromptText.text = $"Press ({backKeyP1}) to go back!";
+                    AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Ready:
-                    // hmmmmm
                     break;
             }
         }
-        else 
+        else
         {
             switch (p2State)
             {
@@ -212,20 +206,20 @@ public class CharacterSelectManager : MonoBehaviour
                     {
                         isCharacterTaken[player2Index] = true;
                         p2State = PlayerSelectState.Selected;
-
-                        // Stop the selecting animation
-                        if (p2SelectingRoutine != null) StopCoroutine(p2SelectingRoutine);
+                        if (p2SelectingRoutine != null)
+                            StopCoroutine(p2SelectingRoutine);
                         player2StatusText.text = "Selected";
                         player2PromptText.text = $"Press ({readyKeyP2}) to Ready!";
+                        AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     }
                     break;
                 case PlayerSelectState.Selected:
                     p2State = PlayerSelectState.Ready;
                     player2StatusText.text = "Ready";
                     player2PromptText.text = $"Press ({backKeyP2}) to go back!";
+                    AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Ready:
-                    // hmmmmmm2
                     break;
             }
         }
@@ -241,23 +235,22 @@ public class CharacterSelectManager : MonoBehaviour
                     p1State = PlayerSelectState.Selected;
                     player1StatusText.text = "Selected";
                     player1PromptText.text = $"Press ({readyKeyP1}) to Ready!";
+                    AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Selected:
-                    // Unselect the character, make it available again
                     isCharacterTaken[player1Index] = false;
                     p1State = PlayerSelectState.Selecting;
-                    player1PromptText.text = $"Press ({selectKeyP1}) to Choose a character";
-                    // Restart the selecting animation
-                    if (p1SelectingRoutine != null) StopCoroutine(p1SelectingRoutine);
+                    player1PromptText.text = $"Press ({selectKeyP1}) to select character!";
+                    if (p1SelectingRoutine != null)
+                        StopCoroutine(p1SelectingRoutine);
                     p1SelectingRoutine = StartCoroutine(AnimateSelectingText(player1StatusText, 1));
+                    AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Selecting:
-                    // Possibly exit or do nothing
-                    // For now, do nothing
                     break;
             }
         }
-        else // playerNumber == 2
+        else
         {
             switch (p2State)
             {
@@ -265,17 +258,18 @@ public class CharacterSelectManager : MonoBehaviour
                     p2State = PlayerSelectState.Selected;
                     player2StatusText.text = "Selected";
                     player2PromptText.text = $"Press ({readyKeyP2}) to Ready!";
+                    AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Selected:
-                    // Unselect
                     isCharacterTaken[player2Index] = false;
                     p2State = PlayerSelectState.Selecting;
-                    player2PromptText.text = $"Press ({selectKeyP2}) to Choose a character";
-                    if (p2SelectingRoutine != null) StopCoroutine(p2SelectingRoutine);
+                    player2PromptText.text = $"Press ({selectKeyP2}) to select character!";
+                    if (p2SelectingRoutine != null)
+                        StopCoroutine(p2SelectingRoutine);
                     p2SelectingRoutine = StartCoroutine(AnimateSelectingText(player2StatusText, 2));
+                    AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
                 case PlayerSelectState.Selecting:
-                    // Possibly exit or do nothing????
                     break;
             }
         }
@@ -299,7 +293,6 @@ public class CharacterSelectManager : MonoBehaviour
     {
         for (int i = 0; i < p1SelectIndicators.Length; i++)
             p1SelectIndicators[i].SetActive(i == player1Index);
-
         for (int i = 0; i < p2SelectIndicators.Length; i++)
             p2SelectIndicators[i].SetActive(i == player2Index);
     }
@@ -309,13 +302,9 @@ public class CharacterSelectManager : MonoBehaviour
         string baseString = "Selecting";
         string[] dotsCycle = new string[] { ".", "..", "..." };
         int idx = 0;
-
         while (true)
         {
-            bool isSelecting = false;
-            if (playerNum == 1) isSelecting = (p1State == PlayerSelectState.Selecting);
-            else                isSelecting = (p2State == PlayerSelectState.Selecting);
-
+            bool isSelecting = (playerNum == 1) ? (p1State == PlayerSelectState.Selecting) : (p2State == PlayerSelectState.Selecting);
             if (isSelecting)
             {
                 statusText.text = baseString + dotsCycle[idx];
@@ -338,5 +327,44 @@ public class CharacterSelectManager : MonoBehaviour
             yield return null;
         }
         SceneManager.LoadScene(sceneName);
+    }
+
+    // ---------------------------
+    // Bounce animation for the player selection indicators :)
+    // ---------------------------
+    private void AnimatePanel(RectTransform panel, int direction = 1)
+    {
+        StartCoroutine(BounceRoutine(panel, direction));
+    }
+
+    private IEnumerator BounceRoutine(RectTransform panel, int direction)
+    {
+        panel.gameObject.SetActive(true);
+
+        Vector2 originalPos = panel.anchoredPosition;
+        // Apply an offset based on the direction of movement.
+        Vector2 offset = new Vector2(50f * direction, 0f);
+        float halfDuration = 0.2f;
+
+        float t = 0f;
+        while (t < halfDuration)
+        {
+            t += Time.deltaTime;
+            float normalized = t / halfDuration;
+            panel.anchoredPosition = Vector2.Lerp(originalPos, originalPos + offset, normalized);
+            yield return null;
+        }
+
+        t = 0f;
+        while (t < halfDuration)
+        {
+            t += Time.deltaTime;
+            float normalized = t / halfDuration;
+            panel.anchoredPosition = Vector2.Lerp(originalPos + offset, originalPos, normalized);
+            yield return null;
+        }
+
+        panel.anchoredPosition = originalPos;
+        yield return new WaitForSeconds(0.1f);
     }
 }
