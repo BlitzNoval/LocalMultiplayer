@@ -5,10 +5,10 @@ using UnityEngine;
     {
        [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
 [SerializeField, Range(0, 5)] private int _maxAirJumps = 0;
-[SerializeField, Range(0f, 10f)] private float _downwardGravityMultiplier = 6f; // Increase from 3f
-[SerializeField, Range(0f, 5f)] private float _upwardGravityMultiplier = 2.5f; // Increase from 1.7f
+[SerializeField, Range(0f, 10f)] private float _downwardGravityMultiplier = 8f; // Up from 6f for faster falls
+[SerializeField, Range(0f, 5f)] private float _upwardGravityMultiplier = 3f; // Up from 2.5f for sharper jumps
 [SerializeField, Range(0f, 0.3f)] private float _coyoteTime = 0.15f; // Decrease from 0.2f
-[SerializeField, Range(0f, 0.3f)] private float _jumpBufferTime = 0.1f; // D
+[SerializeField, Range(0f, 0.3f)] private float _jumpBufferTime = 0.15f; // Up from 0.1f for easier timing
         private Controller _controller;
         private Rigidbody2D _body;
         private CollisionDataRetriever _ground;
