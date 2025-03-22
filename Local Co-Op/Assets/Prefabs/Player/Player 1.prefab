@@ -302,18 +302,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cec78228536cbf42944c75a94ccfa5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSpeed: 20
+  _maxSpeed: 60
   _maxAcceleration: 100
   _maxAirAcceleration: 100
-  _instantStopThreshold: 0.1
-  _spriteTransform: {fileID: 467863142908839898}
-  _tiltAngle: 8
-  _tiltSpeed: 10
-  _initialBoostMultiplier: 1.2
-  _initialBoostTime: 0.15
-  _airControlFactor: 0.8
   _maxDeceleration: 100
   _maxAirDeceleration: 100
+  _instantStopThreshold: 12
+  _spriteTransform: {fileID: 467863142908839898}
+  _tiltAngle: 11.97
+  _tiltSpeed: 7.6
+  _initialBoostMultiplier: 1.2
+  _initialBoostTime: 0.15
+  _airControlFactor: 1
 --- !u!114 &4610877841099924255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 964b5deda26eceb45b47a23ca44c9893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpHeight: 5
+  _jumpHeight: 10
   _maxAirJumps: 1
   _downwardGravityMultiplier: 6
   _upwardGravityMultiplier: 2.5
@@ -357,10 +357,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wallSlideMaxSpeed: 5
-  _wallJumpClimb: {x: 10, y: 20}
+  _wallStickTime: 0.5
+  _wallJumpClimb: {x: 20, y: 45}
   _wallJumpBounce: {x: 20, y: 20}
   _wallJumpLeap: {x: 20, y: 12}
-  _wallStickTime: 0.5
 --- !u!114 &460942384311707447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,7 +480,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.03, y: 17.84, z: -0.000018119812}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 467863142908839898}

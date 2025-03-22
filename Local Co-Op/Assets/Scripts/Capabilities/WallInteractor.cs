@@ -6,12 +6,13 @@ using UnityEngine;
         public bool WallJumping { get; private set; }
 
         [Header("Wall Slide")]
-        [SerializeField][Range(0.1f, 5f)] private float _wallSlideMaxSpeed = 2f;
+        [SerializeField, Range(0.1f, 5f)] private float _wallSlideMaxSpeed = 4f; // Up from 2f for quicker sliding
         [Header("Wall Jump")]
-        [SerializeField] private Vector2 _wallJumpClimb = new Vector2(4f, 12f);
-        [SerializeField] private Vector2 _wallJumpBounce = new Vector2(10.7f, 10f);
-        [SerializeField] private Vector2 _wallJumpLeap = new Vector2(14f, 12f);
-        [SerializeField, Range(0.05f, 0.5f)] private float _wallStickTime = 0.25f;
+       [SerializeField, Range(0.05f, 0.5f)] private float _wallStickTime = 0.1f; // Down from 0.25f to detach faster
+
+        [SerializeField] private Vector2 _wallJumpClimb = new Vector2(6f, 14f); // Up from (4f, 12f) for a stronger climb
+        [SerializeField] private Vector2 _wallJumpBounce = new Vector2(12f, 12f); // Up from (10.7f, 10f) for a solid bounce
+        [SerializeField] private Vector2 _wallJumpLeap = new Vector2(16f, 14f); // Up from (14f, 12f) for a quick leap
         
         private CollisionDataRetriever _collisionDataRetriever;
         private Rigidbody2D _body;
