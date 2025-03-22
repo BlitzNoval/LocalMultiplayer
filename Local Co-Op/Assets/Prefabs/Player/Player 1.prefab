@@ -313,7 +313,7 @@ MonoBehaviour:
   _tiltSpeed: 7.6
   _initialBoostMultiplier: 1.2
   _initialBoostTime: 0.15
-  _airControlFactor: 1
+  _airControlFactor: 0.7
 --- !u!114 &4610877841099924255
 MonoBehaviour:
   m_ObjectHideFlags: 0
