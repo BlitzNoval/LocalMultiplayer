@@ -212,7 +212,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      orange-color-solid-background-1920x1080_0: 7411192806899793043
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

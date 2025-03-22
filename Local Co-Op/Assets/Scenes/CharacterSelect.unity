@@ -1250,7 +1250,7 @@ MonoBehaviour:
     m_ActionId: 854992f5-d7aa-4448-9b9e-be7935ae5ef3
     m_ActionName: 'Gameplay/CancelSelection[/Keyboard/escape,/XInputControllerWindows/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -1556,7 +1556,7 @@ MonoBehaviour:
     m_ActionId: 854992f5-d7aa-4448-9b9e-be7935ae5ef3
     m_ActionName: 'Gameplay/CancelSelection[/Keyboard/escape,/XInputControllerWindows/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: GamePad
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
