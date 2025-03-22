@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CharacterSelectManager : MonoBehaviour
 {
+    //  the possible states for each player's selection process.
     private enum PlayerSelectState
     {
         Selecting,
@@ -27,7 +29,7 @@ public class CharacterSelectManager : MonoBehaviour
     public GameObject[] p1SelectIndicators;
     public GameObject[] p2SelectIndicators;
 
-    [Header("UI - Bottom Panels (Player Prompts & Info)")]
+    [Header("UI - Bottom Panels (Prompts & Info)")]
     public Image player1Image;
     public TMP_Text player1NameText;
     public TMP_Text player1StatusText;
@@ -60,11 +62,16 @@ public class CharacterSelectManager : MonoBehaviour
     private Coroutine p1SelectingRoutine;
     private Coroutine p2SelectingRoutine;
 
+    // Stores active bounce animations so they can be stopped if re-triggered
+    private Dictionary<RectTransform, Coroutine> bounceRoutines = new Dictionary<RectTransform, Coroutine>();
+
+    /// Initializes the array that tracks which characters are taken.
     private void Awake()
     {
         isCharacterTaken = new bool[characters.Length];
     }
 
+    /// Sets up initial UI states, starts "Selecting" text animations
     private void Start()
     {
         UpdatePlayer1UI();
@@ -86,13 +93,15 @@ public class CharacterSelectManager : MonoBehaviour
             Debug.Log("Player2 Default Map: " + player2Input.currentActionMap.name);
     }
 
+
+    /// Checks input for both players every frame, handles their selection ,  moves to the next scene if both are ready
     private void Update()
     {
         if (player1Input != null)
         {
             Vector2 p1move = player1Input.currentActionMap["Move"].ReadValue<Vector2>();
             HandleHorizontalNav(ref player1Index, p1move.x, 1);
-            
+
             if (player1Input.currentActionMap["Jump"].triggered)
                 OnSelectOrReady(1);
 
@@ -120,6 +129,7 @@ public class CharacterSelectManager : MonoBehaviour
         }
     }
 
+    /// Allows horizontal navigation if the player is in Selecting state Moves to the next available character index after checking
     private void HandleHorizontalNav(ref int currentIndex, float moveX, int playerNumber)
     {
         PlayerSelectState state = (playerNumber == 1) ? p1State : p2State;
@@ -130,45 +140,54 @@ public class CharacterSelectManager : MonoBehaviour
         {
             int dir = (moveX > 0) ? 1 : -1;
             float lastInput = (playerNumber == 1) ? p1LastInputTime : p2LastInputTime;
+
             if (Time.time - lastInput > inputCooldown)
             {
                 currentIndex = GetNextAvailableCharacterIndex(currentIndex, dir);
 
                 if (playerNumber == 1)
                 {
-                    UpdatePlayer1UI();
                     p1LastInputTime = Time.time;
+                    UpdatePlayer1UI();
+                    UpdateIndicatorUI();
                     player1PromptText.text = $"Press ({selectKeyP1}) to select character!";
                     AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>(), dir);
                 }
                 else
                 {
-                    UpdatePlayer2UI();
                     p2LastInputTime = Time.time;
+                    UpdatePlayer2UI();
+                    UpdateIndicatorUI();
                     player2PromptText.text = $"Press ({selectKeyP2}) to select character!";
                     AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>(), dir);
                 }
-                UpdateIndicatorUI();
             }
         }
     }
 
+
+    /// Finds the next free character index in the given direction, skipping those that are already taken so that players can't reselect multiple characters
     private int GetNextAvailableCharacterIndex(int startIndex, int direction)
     {
         int newIndex = startIndex;
         int loopCount = 0;
+
         do
         {
             newIndex += direction;
             if (newIndex < 0) newIndex = characters.Length - 1;
             if (newIndex >= characters.Length) newIndex = 0;
+
             loopCount++;
             if (loopCount > characters.Length)
                 break;
+
         } while (isCharacterTaken[newIndex]);
+
         return newIndex;
     }
 
+    /// Handles what happens when a player tries to select a character or set  themselves as ready
     private void OnSelectOrReady(int playerNumber)
     {
         if (playerNumber == 1)
@@ -180,19 +199,23 @@ public class CharacterSelectManager : MonoBehaviour
                     {
                         isCharacterTaken[player1Index] = true;
                         p1State = PlayerSelectState.Selected;
+
                         if (p1SelectingRoutine != null)
                             StopCoroutine(p1SelectingRoutine);
+
                         player1StatusText.text = "Selected";
                         player1PromptText.text = $"Press ({readyKeyP1}) to Ready!";
                         AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     }
                     break;
+
                 case PlayerSelectState.Selected:
                     p1State = PlayerSelectState.Ready;
                     player1StatusText.text = "Ready";
                     player1PromptText.text = $"Press ({backKeyP1}) to go back!";
                     AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Ready:
                     break;
             }
@@ -206,25 +229,30 @@ public class CharacterSelectManager : MonoBehaviour
                     {
                         isCharacterTaken[player2Index] = true;
                         p2State = PlayerSelectState.Selected;
+
                         if (p2SelectingRoutine != null)
                             StopCoroutine(p2SelectingRoutine);
+
                         player2StatusText.text = "Selected";
                         player2PromptText.text = $"Press ({readyKeyP2}) to Ready!";
                         AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     }
                     break;
+
                 case PlayerSelectState.Selected:
                     p2State = PlayerSelectState.Ready;
                     player2StatusText.text = "Ready";
                     player2PromptText.text = $"Press ({backKeyP2}) to go back!";
                     AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Ready:
                     break;
             }
         }
     }
 
+    /// Handles what happens when a player tries to back out from Ready or Selected states to re select a character or for whatver reason they might do this who knows?
     private void OnBack(int playerNumber)
     {
         if (playerNumber == 1)
@@ -237,15 +265,19 @@ public class CharacterSelectManager : MonoBehaviour
                     player1PromptText.text = $"Press ({readyKeyP1}) to Ready!";
                     AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Selected:
                     isCharacterTaken[player1Index] = false;
                     p1State = PlayerSelectState.Selecting;
                     player1PromptText.text = $"Press ({selectKeyP1}) to select character!";
+
                     if (p1SelectingRoutine != null)
                         StopCoroutine(p1SelectingRoutine);
                     p1SelectingRoutine = StartCoroutine(AnimateSelectingText(player1StatusText, 1));
+
                     AnimatePanel(p1SelectIndicators[player1Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Selecting:
                     break;
             }
@@ -260,21 +292,26 @@ public class CharacterSelectManager : MonoBehaviour
                     player2PromptText.text = $"Press ({readyKeyP2}) to Ready!";
                     AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Selected:
                     isCharacterTaken[player2Index] = false;
                     p2State = PlayerSelectState.Selecting;
                     player2PromptText.text = $"Press ({selectKeyP2}) to select character!";
+
                     if (p2SelectingRoutine != null)
                         StopCoroutine(p2SelectingRoutine);
                     p2SelectingRoutine = StartCoroutine(AnimateSelectingText(player2StatusText, 2));
+
                     AnimatePanel(p2SelectIndicators[player2Index].GetComponent<RectTransform>());
                     break;
+
                 case PlayerSelectState.Selecting:
                     break;
             }
         }
     }
 
+    /// Updates the UI elements for Player 1
     private void UpdatePlayer1UI()
     {
         CharacterData charData = characters[player1Index];
@@ -282,6 +319,7 @@ public class CharacterSelectManager : MonoBehaviour
         player1Image.sprite = charData.characterSprite;
     }
 
+    /// Updates the UI elements for Player 2
     private void UpdatePlayer2UI()
     {
         CharacterData charData = characters[player2Index];
@@ -289,22 +327,29 @@ public class CharacterSelectManager : MonoBehaviour
         player2Image.sprite = charData.characterSprite;
     }
 
+    /// Ensures that only the correct top indicator of which character is selected is active for each player as they move through them
     private void UpdateIndicatorUI()
     {
         for (int i = 0; i < p1SelectIndicators.Length; i++)
             p1SelectIndicators[i].SetActive(i == player1Index);
+
         for (int i = 0; i < p2SelectIndicators.Length; i++)
             p2SelectIndicators[i].SetActive(i == player2Index);
     }
 
-    IEnumerator AnimateSelectingText(TMP_Text statusText, int playerNum)
+
+    /// Shows "Selecting..." text animation for the player's status while they remain in the Selecting state
+    private IEnumerator AnimateSelectingText(TMP_Text statusText, int playerNum)
     {
         string baseString = "Selecting";
-        string[] dotsCycle = new string[] { ".", "..", "..." };
+        string[] dotsCycle = { ".", "..", "..." };
         int idx = 0;
+
         while (true)
         {
-            bool isSelecting = (playerNum == 1) ? (p1State == PlayerSelectState.Selecting) : (p2State == PlayerSelectState.Selecting);
+            bool isSelecting = (playerNum == 1) ? (p1State == PlayerSelectState.Selecting)
+                                                : (p2State == PlayerSelectState.Selecting);
+
             if (isSelecting)
             {
                 statusText.text = baseString + dotsCycle[idx];
@@ -314,11 +359,13 @@ public class CharacterSelectManager : MonoBehaviour
         }
     }
 
+    /// Fades out the screen, then loads the obstacle placement scene
     private IEnumerator FadeOutAndLoadScene(string sceneName)
     {
         fadeImage.gameObject.SetActive(true);
         Color startColor = fadeImage.color;
         float t = 0f;
+
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -326,27 +373,33 @@ public class CharacterSelectManager : MonoBehaviour
             fadeImage.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
             yield return null;
         }
+
         SceneManager.LoadScene(sceneName);
     }
 
-    // ---------------------------
-    // Bounce animation for the player selection indicators :)
-    // ---------------------------
+
+    /// Initiates a bounce animation on the given panel. Direction indicates left or right movement
     private void AnimatePanel(RectTransform panel, int direction = 1)
     {
-        StartCoroutine(BounceRoutine(panel, direction));
+        if (bounceRoutines.ContainsKey(panel) && bounceRoutines[panel] != null)
+        {
+            StopCoroutine(bounceRoutines[panel]);
+            bounceRoutines[panel] = null;
+        }
+
+        bounceRoutines[panel] = StartCoroutine(BounceRoutine(panel, direction));
     }
 
+
+    // Performs the bounce animation by moving the panel to an offset and back
     private IEnumerator BounceRoutine(RectTransform panel, int direction)
     {
-        panel.gameObject.SetActive(true);
-
         Vector2 originalPos = panel.anchoredPosition;
-        // Apply an offset based on the direction of movement.
         Vector2 offset = new Vector2(50f * direction, 0f);
         float halfDuration = 0.2f;
-
         float t = 0f;
+
+        panel.anchoredPosition = originalPos;
         while (t < halfDuration)
         {
             t += Time.deltaTime;
@@ -365,6 +418,5 @@ public class CharacterSelectManager : MonoBehaviour
         }
 
         panel.anchoredPosition = originalPos;
-        yield return new WaitForSeconds(0.1f);
     }
 }
