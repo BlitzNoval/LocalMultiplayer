@@ -6,7 +6,7 @@ public class PlayerSpawner : MonoBehaviour
     public PlayerInputManager playerInputManager;
     public Transform[] spawnPoints; // Assign spawn points in the inspector
 
-    private int playerCount = 0; // Track spawned players
+    private int playerCount = 0; // Track spawned players 
 
     void Start()
     {
