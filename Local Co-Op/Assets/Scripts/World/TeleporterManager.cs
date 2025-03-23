@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class SimpleTeleporter : MonoBehaviour
 {
@@ -8,106 +9,137 @@ public class SimpleTeleporter : MonoBehaviour
     public Transform exitPoint;
 
     [Header("Charge Settings")]
+    [Tooltip("Time in seconds to recharge 25% after activation")]
+    public float rechargeTimePerLevel = 10f;
     public GameObject emptyIndicator;   // 0% charge
     public GameObject charge25Indicator; // 25% charge
     public GameObject charge50Indicator; // 50% charge
     public GameObject charge75Indicator; // 75% charge
     public GameObject charge100Indicator; // 100% charge
 
-    private float chargeLevel = 1.0f; // 1.0 = 100%, 0 = empty
+    [Header("Charge Display")]
+    public TextMeshProUGUI chargeText;
+
+    [Header("Level Event Manager")]
+    public LevelEventManager levelEventManager;
+
+    private float chargeLevel = 0.0f;
+    private bool isActivated = false;
     private bool isRecharging = false;
 
     private void Start()
     {
-        // Initialize teleporter visuals
+        chargeLevel = 0.0f;
         UpdateChargeIndicators();
+        UpdateChargeText();
+        if (levelEventManager != null)
+        {
+            levelEventManager.OnActivateEvent += ActivateTeleporter;
+            levelEventManager.OnResetEvent += ResetTeleporter;
+        }
+    }
+
+    private void Update()
+    {
+        if (!isActivated && levelEventManager != null)
+        {
+            chargeLevel = levelEventManager.GetTimerProgress();
+            UpdateChargeIndicators();
+            UpdateChargeText();
+        }
+    }
+
+    public void ActivateTeleporter()
+    {
+        isActivated = true;
+        chargeLevel = 1.0f;
+        UpdateChargeIndicators();
+        UpdateChargeText();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if we have charge and a linked teleporter
-        if (chargeLevel > 0 && linkedTeleporter != null && linkedTeleporter.exitPoint != null)
+        if (!isActivated || chargeLevel <= 0 || linkedTeleporter == null || linkedTeleporter.exitPoint == null)
+            return;
+
+        Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
+        Vector2 velocity = Vector2.zero;
+        if (rb != null)
         {
-            // Preserve momentum for any object with a Rigidbody2D
-            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
-            Vector2 velocity = Vector2.zero;
-            
-            if (rb != null)
-            {
-                velocity = rb.linearVelocity;
-            }
-            
-            // Teleport to the linked teleporter's exit point
-            collision.transform.position = linkedTeleporter.exitPoint.position;
-            
-            // Restore momentum
-            if (rb != null)
-            {
-                rb.linearVelocity = velocity;
-            }
-            
-            // Reduce charge
-            UseCharge();
+            velocity = rb.linearVelocity;
         }
+        collision.transform.position = linkedTeleporter.exitPoint.position;
+        if (rb != null)
+        {
+            rb.linearVelocity = velocity;
+        }
+        UseCharge();
     }
-    
+
     private void UseCharge()
     {
-        // Reduce charge by 25%
         chargeLevel -= 0.25f;
         if (chargeLevel < 0)
             chargeLevel = 0;
-            
-        // Update visuals
         UpdateChargeIndicators();
-        
-        // Start recharging if not already
+        UpdateChargeText();
         if (!isRecharging && chargeLevel < 1.0f)
         {
             StartCoroutine(RechargeOverTime());
         }
     }
-    
+
     private IEnumerator RechargeOverTime()
     {
         isRecharging = true;
-        
-        // Wait 2.5 seconds before starting to recharge
-        yield return new WaitForSeconds(2.5f);
-        
-        // Recharge in 25% increments every 2.5 seconds
         while (chargeLevel < 1.0f)
         {
+            yield return new WaitForSeconds(rechargeTimePerLevel);
             chargeLevel += 0.25f;
             if (chargeLevel > 1.0f)
                 chargeLevel = 1.0f;
-                
             UpdateChargeIndicators();
-            yield return new WaitForSeconds(2.5f);
+            UpdateChargeText();
         }
-        
         isRecharging = false;
     }
-    
+
     private void UpdateChargeIndicators()
     {
-        // Disable all indicators first
         emptyIndicator.SetActive(false);
         charge25Indicator.SetActive(false);
         charge50Indicator.SetActive(false);
         charge75Indicator.SetActive(false);
         charge100Indicator.SetActive(false);
-        
-        // Enable the appropriate indicator based on charge level
-        if (chargeLevel == 0)
+
+        if (chargeLevel < 0.25f)
             emptyIndicator.SetActive(true);
-        else if (chargeLevel <= 0.25f)
+        else if (chargeLevel < 0.5f)
             charge25Indicator.SetActive(true);
-        else if (chargeLevel <= 0.5f)
+        else if (chargeLevel < 0.75f)
             charge50Indicator.SetActive(true);
-        else if (chargeLevel <= 0.75f)
+        else if (chargeLevel < 1.0f)
             charge75Indicator.SetActive(true);
         else
             charge100Indicator.SetActive(true);
+    }
+
+    private void UpdateChargeText()
+    {
+        if (chargeText != null)
+        {
+            int percentage = Mathf.RoundToInt(chargeLevel * 100f);
+            chargeText.text = percentage + "%";
+        }
+    }
+
+    public void ResetTeleporter()
+    {
+        isActivated = false;
+        chargeLevel = 0.0f;
+        StopAllCoroutines();
+        isRecharging = false;
+        UpdateChargeIndicators();
+        UpdateChargeText();
     }
 }
