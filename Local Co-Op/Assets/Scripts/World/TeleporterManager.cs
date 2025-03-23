@@ -1,138 +1,113 @@
 using UnityEngine;
+using System.Collections;
 
-public class TeleporterController : MonoBehaviour
+public class SimpleTeleporter : MonoBehaviour
 {
-    public enum ChargeState { Off, Low, Medium, High, FullyCharged }
+    [Header("Teleporter Setup")]
+    public SimpleTeleporter linkedTeleporter;
+    public Transform exitPoint;
 
     [Header("Charge Settings")]
-    // Test timer for demonstration (in seconds)
-    private float timer = 0f;
-    public float lowChargeTime = 20f;      // After 20 seconds: low charge
-    public float mediumChargeTime = 40f;   // After 40 seconds: medium charge
-    public float highChargeTime = 50f;     // After 50 seconds: high charge
-    public float fullChargeTime = 60f;     // After 60 seconds: fully charged
+    public GameObject emptyIndicator;   // 0% charge
+    public GameObject charge25Indicator; // 25% charge
+    public GameObject charge50Indicator; // 50% charge
+    public GameObject charge75Indicator; // 75% charge
+    public GameObject charge100Indicator; // 100% charge
 
-    public ChargeState currentChargeState = ChargeState.Off;
+    private float chargeLevel = 1.0f; // 1.0 = 100%, 0 = empty
+    private bool isRecharging = false;
 
-    [Header("Visual Settings")]
-    // Assign the SpriteRenderer on the teleporter tileset
-    public SpriteRenderer spriteRenderer;
-    // Sprites representing the various charge states (assign via Inspector)
-    public Sprite offSprite;
-    public Sprite lowChargeSprite;
-    public Sprite mediumChargeSprite;
-    public Sprite highChargeSprite;
-    public Sprite fullChargeSprite;
-
-    [Header("Teleport Settings")]
-    // Destination for teleportation (assign via Inspector)
-    public Transform teleportDestination;
-
-    void Update()
+    private void Start()
     {
-        // For testing: increment timer and update the teleporter charge state.
-        timer += Time.deltaTime;
-        UpdateChargeState();
+        // Initialize teleporter visuals
+        UpdateChargeIndicators();
     }
 
-    /// <summary>
-    /// Determines the current charge state based on the timer.
-    /// </summary>
-    void UpdateChargeState()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        ChargeState newState = currentChargeState;
-        if (timer < lowChargeTime)
+        // Check if we have charge and a linked teleporter
+        if (chargeLevel > 0 && linkedTeleporter != null && linkedTeleporter.exitPoint != null)
         {
-            newState = ChargeState.Off;
+            // Preserve momentum for any object with a Rigidbody2D
+            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
+            Vector2 velocity = Vector2.zero;
+            
+            if (rb != null)
+            {
+                velocity = rb.linearVelocity;
+            }
+            
+            // Teleport to the linked teleporter's exit point
+            collision.transform.position = linkedTeleporter.exitPoint.position;
+            
+            // Restore momentum
+            if (rb != null)
+            {
+                rb.linearVelocity = velocity;
+            }
+            
+            // Reduce charge
+            UseCharge();
         }
-        else if (timer < mediumChargeTime)
+    }
+    
+    private void UseCharge()
+    {
+        // Reduce charge by 25%
+        chargeLevel -= 0.25f;
+        if (chargeLevel < 0)
+            chargeLevel = 0;
+            
+        // Update visuals
+        UpdateChargeIndicators();
+        
+        // Start recharging if not already
+        if (!isRecharging && chargeLevel < 1.0f)
         {
-            newState = ChargeState.Low;
+            StartCoroutine(RechargeOverTime());
         }
-        else if (timer < highChargeTime)
+    }
+    
+    private IEnumerator RechargeOverTime()
+    {
+        isRecharging = true;
+        
+        // Wait 2.5 seconds before starting to recharge
+        yield return new WaitForSeconds(2.5f);
+        
+        // Recharge in 25% increments every 2.5 seconds
+        while (chargeLevel < 1.0f)
         {
-            newState = ChargeState.Medium;
+            chargeLevel += 0.25f;
+            if (chargeLevel > 1.0f)
+                chargeLevel = 1.0f;
+                
+            UpdateChargeIndicators();
+            yield return new WaitForSeconds(2.5f);
         }
-        else if (timer < fullChargeTime)
-        {
-            newState = ChargeState.High;
-        }
+        
+        isRecharging = false;
+    }
+    
+    private void UpdateChargeIndicators()
+    {
+        // Disable all indicators first
+        emptyIndicator.SetActive(false);
+        charge25Indicator.SetActive(false);
+        charge50Indicator.SetActive(false);
+        charge75Indicator.SetActive(false);
+        charge100Indicator.SetActive(false);
+        
+        // Enable the appropriate indicator based on charge level
+        if (chargeLevel == 0)
+            emptyIndicator.SetActive(true);
+        else if (chargeLevel <= 0.25f)
+            charge25Indicator.SetActive(true);
+        else if (chargeLevel <= 0.5f)
+            charge50Indicator.SetActive(true);
+        else if (chargeLevel <= 0.75f)
+            charge75Indicator.SetActive(true);
         else
-        {
-            newState = ChargeState.FullyCharged;
-        }
-
-        if (newState != currentChargeState)
-        {
-            currentChargeState = newState;
-            UpdateSprite();
-        }
-    }
-
-    /// <summary>
-    /// Updates the teleporter’s sprite based on its current charge state.
-    /// </summary>
-    void UpdateSprite()
-    {
-        if (spriteRenderer != null)
-        {
-            switch (currentChargeState)
-            {
-                case ChargeState.Off:
-                    spriteRenderer.sprite = offSprite;
-                    break;
-                case ChargeState.Low:
-                    spriteRenderer.sprite = lowChargeSprite;
-                    break;
-                case ChargeState.Medium:
-                    spriteRenderer.sprite = mediumChargeSprite;
-                    break;
-                case ChargeState.High:
-                    spriteRenderer.sprite = highChargeSprite;
-                    break;
-                case ChargeState.FullyCharged:
-                    spriteRenderer.sprite = fullChargeSprite;
-                    break;
-            }
-        }
-    }
-
-    /// <summary>
-    /// When a player enters the teleporter trigger, if the teleporter is fully charged, teleport them instantly.
-    /// The player's momentum (velocity) is preserved.
-    /// </summary>
-    /// <param name="other">Collider of the entering object</param>
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        // Check if the colliding object is tagged as "Player" and the teleporter is fully charged.
-        if (currentChargeState == ChargeState.FullyCharged && other.CompareTag("Player"))
-        {
-            Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-            Vector2 preservedVelocity = Vector2.zero;
-            if (rb != null)
-            {
-                preservedVelocity = rb.linearVelocity;
-            }
-
-            // Instantly move the player to the designated teleport destination.
-            other.transform.position = teleportDestination.position;
-
-            // Reapply the player's original velocity so momentum is maintained.
-            if (rb != null)
-            {
-                rb.linearVelocity = preservedVelocity;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Resets the teleporter timer and state.
-    /// This can be attached to a UI Button for repeated testing.
-    /// </summary>
-    public void ResetTeleporter()
-    {
-        timer = 0f;
-        currentChargeState = ChargeState.Off;
-        UpdateSprite();
+            charge100Indicator.SetActive(true);
     }
 }
