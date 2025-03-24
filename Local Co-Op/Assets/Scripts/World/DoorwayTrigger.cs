@@ -9,10 +9,10 @@ public class DoorwayTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Trigger Enter: " + other.name + " with tag: " + other.tag);
-        if(other.CompareTag("Untagged"))
+        if(other.CompareTag("Player"))
         {
             playersInDoorway++;
-            Debug.Log("Untagged detected in doorway: " + gameObject.name + ", count: " + playersInDoorway);
+            Debug.Log("Player detected in doorway: " + gameObject.name + ", count: " + playersInDoorway);
         }
     }
 
@@ -20,10 +20,10 @@ public class DoorwayTrigger : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log("Trigger Exit: " + other.name + " with tag: " + other.tag);
-        if(other.CompareTag("Untagged"))
+        if(other.CompareTag("Player"))
         {
             playersInDoorway = Mathf.Max(0, playersInDoorway - 1); // Ensure we don't go below 0
-            Debug.Log("Untagged left doorway: " + gameObject.name + ", count: " + playersInDoorway);
+            Debug.Log("Player left doorway: " + gameObject.name + ", count: " + playersInDoorway);
         }
     }
 
