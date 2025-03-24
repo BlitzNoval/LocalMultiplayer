@@ -1,3 +1,8 @@
+// Title: Input Device Checker
+// Author: ChatGPT
+// Date: 09 March  2025
+// Using to check for inptus on main menu 
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;

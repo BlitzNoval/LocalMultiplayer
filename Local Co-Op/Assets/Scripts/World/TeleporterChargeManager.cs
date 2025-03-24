@@ -1,3 +1,9 @@
+// Title: WOW THIS IS HARD 
+// Author: ChatGPT
+// Date: 22 March  2025
+// This script refused to work with 2 players no matter what I idid , it refused to work when we added the tileset , it was very annoying to debug 
+
+
 using UnityEngine;
 using System.Collections;
 using TMPro;
@@ -15,38 +21,38 @@ public class TeleporterChargeManager : MonoBehaviour
     public TextMeshProUGUI chargeText;
 
     [Header("Charge Visuals")]
-    public GameObject emptyIndicator;    // 0% charge
-    public GameObject charge25Indicator;   // 25% charge
-    public GameObject charge50Indicator;   // 50% charge
-    public GameObject charge75Indicator;   // 75% charge
-    public GameObject charge100Indicator;  // 100% charge
+    public GameObject emptyIndicator;  
+    public GameObject charge25Indicator;
+    public GameObject charge50Indicator;   
+    public GameObject charge75Indicator;   
+    public GameObject charge100Indicator;  
 
-    // Charge is stored as a value between 0 and 1 (1 = 100%)
+ 
     private float chargeLevel = 0f;
-    // This flag indicates if the teleporter system has been activated (doors closed)
+   
     private bool activated = false;
-    // Expose whether the teleporter is active
+ 
     public bool IsTeleporterActive { get { return activated; } }
-    // Keep a handle to the periodic recharge coroutine so we can stop it on reset.
+ 
     private Coroutine rechargeCoroutine;
 
     private void Start()
     {
-        // Subscribe to LevelEventManager events if assigned
+  
         if (levelEventManager != null)
         {
             levelEventManager.OnActivateEvent += ActivateTeleporter;
             levelEventManager.OnResetEvent += ResetTeleporter;
         }
 
-        // Before activation, use the level timer progress as the charge (typically less than 100%)
+       
         chargeLevel = (levelEventManager != null) ? levelEventManager.GetTimerProgress() : 0f;
         UpdateChargeUI();
     }
 
     private void Update()
     {
-        // While not activated, continuously update the charge level based on the level timer progress.
+       
         if (!activated && levelEventManager != null)
         {
             chargeLevel = levelEventManager.GetTimerProgress();
@@ -54,10 +60,7 @@ public class TeleporterChargeManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when LevelEventManager triggers activation (doors closed).
-    /// Sets charge to full (100%) and starts periodic recharge.
-    /// </summary>
+
     private void ActivateTeleporter()
     {
         activated = true;
@@ -68,10 +71,6 @@ public class TeleporterChargeManager : MonoBehaviour
             rechargeCoroutine = StartCoroutine(PeriodicRecharge());
     }
 
-    /// <summary>
-    /// Called when LevelEventManager resets the level.
-    /// Resets activation state and charge.
-    /// </summary>
     private void ResetTeleporter()
     {
         activated = false;
@@ -86,17 +85,13 @@ public class TeleporterChargeManager : MonoBehaviour
         UpdateChargeUI();
     }
 
-    /// <summary>
-    /// Returns true if there is at least 25% charge available.
-    /// </summary>
+    
     public bool CanTeleport()
     {
         return chargeLevel >= 0.25f;
     }
 
-    /// <summary>
-    /// Deducts 25% charge (if available) and updates the UI.
-    /// </summary>
+    
     public void UseCharge()
     {
         if (chargeLevel >= 0.25f)
@@ -113,9 +108,7 @@ public class TeleporterChargeManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates the shared TextMeshProUGUI display and the visual indicator tiles.
-    /// </summary>
+   
     private void UpdateChargeUI()
     {
         if (chargeText != null)
@@ -143,10 +136,7 @@ public class TeleporterChargeManager : MonoBehaviour
             charge100Indicator.SetActive(true);
     }
 
-    /// <summary>
-    /// Every rechargeInterval seconds, if charge is below 100% then recharge 25% 
-    /// with a gradual visual animation (in 1% increments).
-    /// </summary>
+  
     private IEnumerator PeriodicRecharge()
     {
         while (true)
@@ -160,9 +150,7 @@ public class TeleporterChargeManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Gradually increases the charge by 1% increments until 25% is replenished or full charge is reached.
-    /// </summary>
+   
     private IEnumerator RechargeAnimation()
     {
         float targetCharge = Mathf.Min(chargeLevel + 0.25f, 1.0f);
@@ -174,7 +162,7 @@ public class TeleporterChargeManager : MonoBehaviour
             currentPercentage += 1;
             chargeLevel = currentPercentage / 100f;
             UpdateChargeUI();
-            yield return new WaitForSeconds(0.05f); // adjust delay for smoother/faster animation
+            yield return new WaitForSeconds(0.05f); 
         }
     }
 }

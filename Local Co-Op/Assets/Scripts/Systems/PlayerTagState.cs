@@ -3,20 +3,20 @@ using UnityEngine;
 public class PlayerTagState : MonoBehaviour
 {
     [Header("Player Role")]
-    public bool isTagger = false;  // True if this player is the tagger
-    public bool inGracePeriod = false; // Prevents instant re-tagging
+    public bool isTagger = false;  
+    public bool inGracePeriod = false; 
 
     [Header("Visual Indicators")]
-    public GameObject taggerIndicator; // Crown image (assign in Inspector)
-    public GameObject runnerIndicator; // Runner image (assign in Inspector)
-    public GameObject shieldObject; // Shield visual (assign in Inspector)
+    public GameObject taggerIndicator;
+    public GameObject runnerIndicator; 
+    public GameObject shieldObject; 
 
     void Start()
     {
         UpdateIndicator();
     }
 
-    // Updates which indicator is active based on the role
+   
     public void UpdateIndicator()
     {
         if (taggerIndicator != null && runnerIndicator != null)
@@ -26,14 +26,14 @@ public class PlayerTagState : MonoBehaviour
         }
     }
 
-    // Enables the shield to prevent immediate re-tagging
+    
     public void ActivateShield(float duration)
     {
         if (shieldObject != null)
         {
-            shieldObject.SetActive(true); // Show shield
+            shieldObject.SetActive(true);
             inGracePeriod = true;
-            Invoke("DeactivateShield", duration); // Schedule disabling
+            Invoke("DeactivateShield", duration); 
         }
     }
 
@@ -41,7 +41,7 @@ public class PlayerTagState : MonoBehaviour
     {
         if (shieldObject != null)
         {
-            shieldObject.SetActive(false); // Hide shield
+            shieldObject.SetActive(false); 
         }
         inGracePeriod = false;
     }

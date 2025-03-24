@@ -1,9 +1,14 @@
+// Title: Animate like a programmer
+// Author: TaroDev
+// Date: 13 March  2025
+// Availability: https://youtu.be/ZwLekxsSY3Y?si=_kpkE0Fupp2B1afD
+
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CollisionDataRetriever))]
 public class AnimationManager : MonoBehaviour
 {
-    [SerializeField] private Animator animator; // Assign in Inspector for each prefab
+    [SerializeField] private Animator animator; 
 
     private Rigidbody2D body;
     private CollisionDataRetriever collisionDataRetriever;

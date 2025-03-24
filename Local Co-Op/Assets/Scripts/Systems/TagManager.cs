@@ -1,3 +1,8 @@
+// Title: Debug Logs 
+// Author: ChatGPT
+// Date: 22 March  2025
+// Was just lazy to put debug logs in myself  
+
 using UnityEngine;
 using System.Collections;
 using TMPro;
