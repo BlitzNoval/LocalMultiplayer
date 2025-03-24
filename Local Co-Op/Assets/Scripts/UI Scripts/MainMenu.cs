@@ -46,7 +46,7 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(ButtonPressAnimation(button));
     }
 
-    // 🟢 Smooth Scale Animation for UI Panels
+    
     
     private IEnumerator AnimatePanel(GameObject panel, bool opening)
     {
@@ -57,18 +57,18 @@ public class MainMenu : MonoBehaviour
             if (opening)
             {
                 panel.SetActive(true);
-                anim[clipName].speed = 1; // Play forward
+                anim[clipName].speed = 1; 
                 anim[clipName].time = 0f;
                 anim.Play(clipName);
             }
             else
             {
-                anim[clipName].speed = -1; // Play backward
+                anim[clipName].speed = -1; 
                 anim[clipName].time = anim[clipName].length;
                 anim.Play(clipName);
             }
 
-            // Wait for the animation duration
+    
             yield return new WaitForSeconds(anim.clip.length);
 
             if (!opening)
@@ -76,7 +76,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            // Fallback to scaling if no animation found
+          
             float duration = 0.3f;
             float time = 0f;
             Vector3 startScale = opening ? Vector3.zero : Vector3.one;
@@ -96,7 +96,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    // 🔴 Button Press Effect (Shrink & Expand)
+   
     private IEnumerator ButtonPressAnimation(GameObject button)
     {
         Vector3 originalScale = button.transform.localScale;
@@ -108,7 +108,7 @@ public class MainMenu : MonoBehaviour
         button.transform.localScale = originalScale;
     }
 
-    // ⚫ Smooth Scene Transition Delay
+   
     private IEnumerator LoadSceneWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);

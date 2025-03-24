@@ -1,3 +1,8 @@
+// Title: Do Not Destroy 
+// Author: ChatGPT
+// Date: 24 March  2025
+// Do not destory didnt even work so the refrence is to say AI sucks 
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;

@@ -1,3 +1,15 @@
+// Title: Building a custom event system 
+// Author: Game Dev Guide
+// Date: 22 March  2025
+// Availability: https://youtu.be/gx0Lt4tCDE0?si=RcVrtDWzNLZeFk5D
+
+// Title: Debugging 
+// Author: ChatGPT
+// Date: 22 March  2025
+// Used to debug errors which were annoying , essentially when the player was entering it would use double the percentage becuase of the 
+// 3 Trigger Colliders on the players , got around this but it kept using double the charge so ChatGPT just helped me debug it
+
+
 using UnityEngine;
 using System.Collections;
 using System;
