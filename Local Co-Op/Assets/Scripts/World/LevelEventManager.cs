@@ -131,24 +131,25 @@ private IEnumerator CloseDoors()
         bool allFinished = true;
         for (int i = 0; i < doorTiles.Length; i++)
         {
-            // Check if the door has an associated trigger and if the player is inside.
+            // Check if the door has an associated trigger and if ANY player is inside.
             if (i < doorwayTriggers.Length && doorwayTriggers[i] != null && doorwayTriggers[i].IsPlayerInDoorway())
             {
                 // Only log once when the door becomes paused.
                 if (!wasPaused[i])
                 {
-                    Debug.Log("Door " + i + " paused: player is still in the doorway.");
+                    int playerCount = doorwayTriggers[i].GetPlayerCount();
+                    Debug.Log("Door " + i + " paused: " + playerCount + " player(s) still in the doorway.");
                     wasPaused[i] = true;
                 }
                 allFinished = false;
-                continue; // Skip updating this door until the player leaves.
+                continue; // Skip updating this door until all players leave.
             }
             else
             {
                 // If the door was paused in the previous frame, log that it has resumed.
                 if (wasPaused[i])
                 {
-                    Debug.Log("Door " + i + " resumed closing: player left the doorway.");
+                    Debug.Log("Door " + i + " resumed closing: all players left the doorway.");
                     wasPaused[i] = false;
                 }
             }
@@ -178,7 +179,6 @@ private IEnumerator CloseDoors()
     }
     doorsClosed = true;
 }
-
 
 
     /// <summary>
