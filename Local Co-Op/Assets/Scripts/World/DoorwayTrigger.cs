@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DoorwayTrigger : MonoBehaviour
 {
-    // Flag to indicate if the player is in the doorway
-    private bool isPlayerInside = false;
+    // Counter to track how many players are in the doorway
+    private int playersInDoorway = 0;
 
     // Called when another collider enters the trigger collider
     private void OnTriggerEnter2D(Collider2D other)
@@ -11,8 +11,8 @@ public class DoorwayTrigger : MonoBehaviour
         Debug.Log("Trigger Enter: " + other.name + " with tag: " + other.tag);
         if(other.CompareTag("Untagged"))
         {
-            isPlayerInside = true;
-            Debug.Log("Untagged detected in doorway: " + gameObject.name);
+            playersInDoorway++;
+            Debug.Log("Untagged detected in doorway: " + gameObject.name + ", count: " + playersInDoorway);
         }
     }
 
@@ -22,14 +22,20 @@ public class DoorwayTrigger : MonoBehaviour
         Debug.Log("Trigger Exit: " + other.name + " with tag: " + other.tag);
         if(other.CompareTag("Untagged"))
         {
-            isPlayerInside = false;
-            Debug.Log("Untagged left doorway: " + gameObject.name);
+            playersInDoorway = Mathf.Max(0, playersInDoorway - 1); // Ensure we don't go below 0
+            Debug.Log("Untagged left doorway: " + gameObject.name + ", count: " + playersInDoorway);
         }
     }
 
-    // This method returns whether the player is currently in the doorway
+    // This method returns whether any players are currently in the doorway
     public bool IsPlayerInDoorway()
     {
-        return isPlayerInside;
+        return playersInDoorway > 0;
+    }
+    
+    // This method returns the number of players in the doorway
+    public int GetPlayerCount()
+    {
+        return playersInDoorway;
     }
 }
