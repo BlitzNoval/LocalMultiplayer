@@ -1,15 +1,20 @@
+// Title: The ULTIMATE 2D Character CONTROLLER in UNITY
+// Author: Shinjingi
+// Date: 01 March  2025
+// Availability: https://www.youtube.com/watch?v=lcw6nuc2uaU
+
 using UnityEngine;
 
-[RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))] // THIS IS NEEDED EVERYWHERE THESE 3 COMPONENTS PLS
 public class Jump : MonoBehaviour
 {
     [SerializeField, Range(0f, 10f)] private float _jumpHeight = 3f;
-    [SerializeField, Range(0, 5)] private int _maxAirJumps = 1; // Set to 1 for double jump
+    [SerializeField, Range(0, 5)] private int _maxAirJumps = 1; //THIS IS FOR THE DOUBLE JUMP 
     [SerializeField, Range(0f, 10f)] private float _downwardGravityMultiplier = 6f;
     [SerializeField, Range(0f, 5f)] private float _upwardGravityMultiplier = 2.5f;
     [SerializeField, Range(0f, 0.3f)] private float _coyoteTime = 0.15f;
     [SerializeField, Range(0f, 0.3f)] private float _jumpBufferTime = 0.1f;
-    [SerializeField, Range(0f, 1f)] private float _airJumpHeightMultiplier = 0.5f; // New field for air jump height
+    [SerializeField, Range(0f, 1f)] private float _airJumpHeightMultiplier = 0.5f; 
 
     private Controller _controller;
     private Rigidbody2D _body;
@@ -109,13 +114,13 @@ public class Jump : MonoBehaviour
             _jumpBufferCounter = 0;
             _coyoteCounter = 0;
 
-            // Determine if this is an air jump
+           
             bool isAirJump = !_onGround && _jumpPhase > 0;
 
-            // Calculate effective jump height
+      
             float effectiveJumpHeight = isAirJump ? (_jumpHeight * _airJumpHeightMultiplier) : _jumpHeight;
 
-            // Calculate jump speed using effectiveJumpHeight
+ 
             _jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * effectiveJumpHeight * _upwardGravityMultiplier);
 
             _isJumping = true;

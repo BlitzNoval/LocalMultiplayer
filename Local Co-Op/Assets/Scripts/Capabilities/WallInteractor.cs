@@ -1,3 +1,14 @@
+// Title: The ULTIMATE 2D Character CONTROLLER in UNITY
+// Author: Shinjingi
+// Date: 01 March  2025
+// Availability: https://www.youtube.com/watch?v=lcw6nuc2uaU
+
+// Title: Smooth Wall Climb In Corners
+// Author: ChatGPT
+// Date: 09 March  2025
+// Used to smooth the wall climb , becuase when hitting a corner and wall at the same time caused the player to stop and not move at all 
+
+
 using UnityEngine;
 
     [RequireComponent(typeof(Controller), typeof(CollisionDataRetriever), typeof(Rigidbody2D))]
@@ -6,13 +17,13 @@ using UnityEngine;
         public bool WallJumping { get; private set; }
 
         [Header("Wall Slide")]
-        [SerializeField, Range(0.1f, 5f)] private float _wallSlideMaxSpeed = 4f; // Up from 2f for quicker sliding
+        [SerializeField, Range(0.1f, 5f)] private float _wallSlideMaxSpeed = 4f; 
         [Header("Wall Jump")]
-       [SerializeField, Range(0.05f, 0.5f)] private float _wallStickTime = 0.1f; // Down from 0.25f to detach faster
+       [SerializeField, Range(0.05f, 0.5f)] private float _wallStickTime = 0.1f; 
 
-        [SerializeField] private Vector2 _wallJumpClimb = new Vector2(6f, 14f); // Up from (4f, 12f) for a stronger climb
-        [SerializeField] private Vector2 _wallJumpBounce = new Vector2(12f, 12f); // Up from (10.7f, 10f) for a solid bounce
-        [SerializeField] private Vector2 _wallJumpLeap = new Vector2(16f, 14f); // Up from (14f, 12f) for a quick leap
+        [SerializeField] private Vector2 _wallJumpClimb = new Vector2(6f, 14f); 
+        [SerializeField] private Vector2 _wallJumpBounce = new Vector2(12f, 12f); 
+        [SerializeField] private Vector2 _wallJumpLeap = new Vector2(16f, 14f); 
         
         private CollisionDataRetriever _collisionDataRetriever;
         private Rigidbody2D _body;
@@ -22,16 +33,16 @@ using UnityEngine;
         private bool _onWall, _onGround, _desiredJump, _isJumpReset;
         private float _wallDirectionX,  _wallStickCounter;
 
-        // Start is called before the first frame update
+    
         private void Awake()
 {
     _collisionDataRetriever = GetComponent<CollisionDataRetriever>();
     _body = GetComponent<Rigidbody2D>();
-    _controller = GetComponent<Controller>(); // Should always exist because of RequireComponent
+    _controller = GetComponent<Controller>(); 
 
     _isJumpReset = true;
 
-    // 🔹 Extra safety check to prevent crashes
+    
     if (_controller == null || _controller.input == null)
     {
         Debug.LogError("WallInteractor: Controller or InputController is missing! Make sure the Player prefab has the correct input setup.");
@@ -39,7 +50,7 @@ using UnityEngine;
 }
 
 
-        // Update is called once per frame
+    
         void Update()
         {
 

@@ -1,3 +1,8 @@
+// Title: The ULTIMATE 2D Character CONTROLLER in UNITY
+// Author: Shinjingi
+// Date: 01 March  2025
+// Availability: https://www.youtube.com/watch?v=lcw6nuc2uaU
+
 using UnityEngine;
 
 public class CollisionDataRetriever : MonoBehaviour

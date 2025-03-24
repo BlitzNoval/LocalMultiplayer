@@ -1,19 +1,24 @@
+// Title: The ULTIMATE 2D Character CONTROLLER in UNITY
+// Author: Shinjingi
+// Date: 01 March  2025
+// Availability: https://www.youtube.com/watch?v=lcw6nuc2uaU
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviour
 {
-    public InputController input; // Stores the player's input configuration
-    private PlayerInput _playerInput; // Unity’s PlayerInput component
+    public InputController input; // Storing the player's input here pls
+    private PlayerInput _playerInput; 
 
     private void Awake()
     {
-        _playerInput = GetComponent<PlayerInput>(); // Get the PlayerInput component
+        _playerInput = GetComponent<PlayerInput>(); // Get the PlayerInput here pls
 
-        // 🔹 Ensure each player gets a **new unique instance** of PlayerController
+        
         input = Instantiate(ScriptableObject.CreateInstance<PlayerController>());
 
-        // 🔹 Initialize the Input System for this specific player
+        
         ((PlayerController)input).Initialize(_playerInput);
     }
 }
