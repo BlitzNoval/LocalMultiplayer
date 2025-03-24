@@ -14,7 +14,7 @@ public class LevelEventManager : MonoBehaviour
     public GameObject[] doorwayTriggerObjects;
 
     [Header("Test Timer Settings")]
-    public float testTimerDuration = 60f;
+    public float testTimerDuration = 45f;
     private float testTimer = 0f;
 
     public event Action OnActivateEvent;
