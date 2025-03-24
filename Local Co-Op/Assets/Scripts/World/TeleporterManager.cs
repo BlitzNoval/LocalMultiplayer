@@ -38,11 +38,11 @@ public class SimpleTeleporter : MonoBehaviour
 
         // Teleport the player.
         Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
-        Vector2 velocity = rb != null ? rb.velocity : Vector2.zero;
+        Vector2 velocity = rb != null ? rb.linearVelocity : Vector2.zero;
         collision.transform.position = linkedTeleporter.exitPoint.position;
         if (rb != null)
         {
-            rb.velocity = velocity;
+            rb.linearVelocity = velocity;
         }
 
         // Subtract 25% charge.
