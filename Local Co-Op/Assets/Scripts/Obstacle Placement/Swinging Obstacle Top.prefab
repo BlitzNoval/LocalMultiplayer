@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8826584705844202419}
   - component: {fileID: 2621087936311191892}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4629261593119484560}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Swinging Obstacle Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2460281200407365870}
   - component: {fileID: 2293643330789629122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

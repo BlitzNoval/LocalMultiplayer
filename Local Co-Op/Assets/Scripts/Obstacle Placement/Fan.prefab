@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1502177293042006517}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8692767422352774554}
   - component: {fileID: 2712309900184216138}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4696109083485964041}
   - component: {fileID: 4372884086426325317}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blow Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}

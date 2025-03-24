@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8901580248407911759}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shock Pad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3508353477353443528}
   - component: {fileID: 2464159016461989193}
   - component: {fileID: 8046847843996681879}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pad
   m_TagString: Untagged
   m_Icon: {fileID: 0}

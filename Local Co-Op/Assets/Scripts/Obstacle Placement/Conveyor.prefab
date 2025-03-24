@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 537507074642224414}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Conveyor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 6541159572462195630}
   - component: {fileID: 8481526647948079092}
   - component: {fileID: 8624745570413060381}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Conveyor Belt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
