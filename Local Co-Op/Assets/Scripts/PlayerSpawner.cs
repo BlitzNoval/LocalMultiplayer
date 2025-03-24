@@ -3,18 +3,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public PlayerInputManager playerInputManager;
-    public Transform[] spawnPoints; // Assign spawn points in the inspector
+    public GameObject[] playerPrefabs; // Assign different prefabs for each spawn point in the Inspector
+    public Transform[] spawnPoints;    // Assign spawn points in the Inspector
 
-    private int playerCount = 0; // Track spawned players 
+    private int playerCount = 0;       // Track spawned players
 
     void Start()
     {
-        if (playerInputManager == null)
+        if (playerPrefabs.Length != spawnPoints.Length)
         {
-            playerInputManager = FindObjectOfType<PlayerInputManager>();
+            Debug.LogError("Number of player prefabs and spawn points must match.");
+            return;
         }
-
         SpawnAllPlayers();
     }
 
@@ -24,23 +24,31 @@ public class PlayerSpawner : MonoBehaviour
 
         foreach (InputDevice device in InputSystem.devices)
         {
-            // Ensure the device is valid (Keyboard or Gamepad)
-            if (device == Keyboard.current || device == Gamepad.current)
+            if (device is Keyboard || device is Gamepad)
             {
-                // Spawn the player
-                PlayerInput newPlayer = playerInputManager.JoinPlayer(playerCount, -1, null, device);
+                if (playerCount >= playerPrefabs.Length)
+                {
+                    Debug.LogWarning("More devices than prefabs. Stopping spawn.");
+                    break;
+                }
 
-                // Set spawn position if available
-                if (spawnPoints.Length > playerCount)
+                // Instantiate player with specific prefab and device
+                PlayerInput newPlayer = PlayerInput.Instantiate(
+                    playerPrefabs[playerCount],
+                    playerIndex: playerCount,
+                    pairWithDevice: device
+                );
+
+                if (newPlayer != null)
                 {
                     newPlayer.transform.position = spawnPoints[playerCount].position;
                 }
+                else
+                {
+                    Debug.LogError("Failed to instantiate player for device: " + device.name);
+                }
 
                 playerCount++;
-
-                // Stop if we've reached the max players
-                if (playerCount >= playerInputManager.maxPlayerCount)
-                    break;
             }
         }
     }
