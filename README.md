@@ -24,3 +24,16 @@ Current Bugs:
 - Wall Jumping is inconsistent and bugs out after multiple jumps 
 - Player Movement janky 
 - Object Scaling 
+
+
+Level Assets:
+All the sprites and tiles were created by Callum Freer.
+
+Inspiration for background style
+1 - Super Meat Boy - https://www.pluggedin.com/wp-content/uploads/2021/01/Super-Meat-Boy-Forever-WP.jpg
+2 - Super Meat Boy - https://d1lss44hh2trtw.cloudfront.net/resize?type=webp&url=https%3A%2F%2Fshacknews-www.s3.amazonaws.com%2Fassets%2Farticle%2F2020%2F12%2F10%2Fsuper-meat-boy-forever-1_feature.png&width=1032&sign=4e9wNf4GZAn_Bghrk1jED2t9SAnvxCQvnCECqitz6ng
+3 - speedrunners - https://pinglestudio.com/wp-content/uploads/2021/04/ss_5b951ea4fdf2a934e49eaa15a49e48c9726718ac.1920x1080.jpg
+4 - stick fight the game - https://store-images.s-microsoft.com/image/apps.33202.65168763453942994.59189b32-08e8-4571-bf29-57c880d52d11.0b05769a-b84f-4b9c-88ea-48f4f6d01fd3?q=90&w=320&h=180
+
+Bounce Pad Inspiration:
+Bounce Pad reference image - https://i.ytimg.com/vi/_JtMtnlSFas/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAUQ6YexAVyTyB9LDOmwaIkgspf0g
