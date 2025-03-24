@@ -333,7 +333,7 @@ public class CharacterSelectManager : MonoBehaviour
     }
 
 
-    /// Shows "Selecting..." text animation for the player's status while they remain in the Selecting state
+    /// Shows "Selecting..." text animation for the player's status while they remain in the Selecting state (came out super clean )
     private IEnumerator AnimateSelectingText(TMP_Text statusText, int playerNum)
     {
         string baseString = "Selecting";
