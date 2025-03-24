@@ -138,8 +138,8 @@ Transform:
   m_GameObject: {fileID: 5944038505560397672}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.496, z: 0}
-  m_LocalScale: {x: 0.0236, y: 1, z: 1}
+  m_LocalPosition: {x: 0.001, y: -0.44697, z: 0}
+  m_LocalScale: {x: 0.05224096, y: 0.41081506, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8847302215831835065}
@@ -188,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 4329573852642333158, guid: 0ffc2a0fdd19b7a43ae5c90efbb7d0b7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,7 +226,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4275, y: -0.6224, z: 0}
-  m_LocalScale: {x: 9.016654, y: 0.9136672, z: 1}
+  m_LocalScale: {x: 2.31, y: 0.9136672, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1696450114467586735}
@@ -275,7 +275,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 5064641688392998058, guid: e47a51efc4c962b4eaa74059bd60bf16, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -313,8 +313,8 @@ Transform:
   m_GameObject: {fileID: 8371223264930827296}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0.003, y: -0.935, z: 0}
+  m_LocalScale: {x: 0.36137, y: 0.354865, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8847302215831835065}
@@ -363,7 +363,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 5578923509252960141, guid: ac40d506fe3be7f46a44d5bd01f1409f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -408,5 +408,5 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.50000006
+  m_Offset: {x: -0.004703471, y: 0.018908562}
+  m_Radius: 0.7304853
