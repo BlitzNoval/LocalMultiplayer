@@ -1,15 +1,21 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
+using UnityEngine.InputSystem;
 
 public class TagManager : MonoBehaviour
 {
     public static TagManager Instance;
 
     [Header("Tag Settings")]
-    public float gracePeriodDuration = 3f; // Duration of shield effect
+    public float gracePeriodDuration = 3f;
 
     private PlayerTagState player1;
     private PlayerTagState player2;
+
+    [Header("UI Notification")]
+    [Tooltip("UI TextMeshPro element used for countdown and tag notifications.")]
+    public TextMeshProUGUI notificationText;
 
     void Awake()
     {
@@ -69,10 +75,37 @@ public class TagManager : MonoBehaviour
             currentTagger.UpdateIndicator();
             currentRunner.UpdateIndicator();
 
-            // Activate grace period shield for new runner
             currentTagger.ActivateShield(gracePeriodDuration);
 
             Debug.Log("Roles swapped: " + currentRunner.gameObject.name + " is now the tagger.");
+
+            if (notificationText != null)
+            {
+                StartCoroutine(ShowTaggedNotification(currentRunner));
+            }
         }
+    }
+
+    IEnumerator ShowTaggedNotification(PlayerTagState taggedPlayer)
+    {
+        string playerNotification = "";
+
+        PlayerInput playerInput = taggedPlayer.GetComponent<PlayerInput>();
+        if (playerInput != null)
+        {
+            playerNotification = "Player " + (playerInput.playerIndex + 1).ToString() + " TAGGED!";
+        }
+        else
+        {
+            playerNotification = taggedPlayer.gameObject.name + " TAGGED!";
+        }
+
+        notificationText.text = playerNotification;
+        notificationText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        notificationText.text = "";
+        notificationText.gameObject.SetActive(false);
     }
 }

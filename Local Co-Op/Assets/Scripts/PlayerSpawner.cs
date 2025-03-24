@@ -16,17 +16,17 @@ public class PlayerSpawner : MonoBehaviour
 
     void Start()
     {
+        // Removed automatic spawn to allow delayed spawning.
         if (playerPrefabs.Length != spawnPoints.Length)
         {
             Debug.LogError("Number of player prefabs and spawn points must match.");
             return;
         }
-        
-        SpawnAllPlayers();
     }
 
     public void SpawnAllPlayers()
     {
+        // Clear existing players if any.
         foreach (var player in spawnedPlayers)
         {
             if (player != null)
@@ -36,6 +36,7 @@ public class PlayerSpawner : MonoBehaviour
         }
         spawnedPlayers.Clear();
 
+        // Clear the target group to avoid duplicates.
         if (targetGroup != null)
         {
             targetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
