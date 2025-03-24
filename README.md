@@ -13,3 +13,11 @@ Main Menu:
 - Font: https://fontmeme.com/uplink-hacker-elite-font/
 - White keyboard icon: https://www.iconsdb.com/white-icons/keyboard-icon.html
 - Game Pad Icon: https://www.flaticon.com/free-icon/gamepad_5448052
+
+
+
+Current Bugs:
+- Player Collison with obstacles 
+- Wall Jumping is inconsistent and bugs out after multiple jumps 
+- Player Movement janky 
+- Object Scaling 
