@@ -27,7 +27,8 @@ Current Bugs:
 
 
 Level Assets:
-All the sprites and tiles were created by Callum Freer.
+
+All the sprites and tiles were created and animated by Callum Freer.
 
 Inspiration for background style
 1 - Super Meat Boy - https://www.pluggedin.com/wp-content/uploads/2021/01/Super-Meat-Boy-Forever-WP.jpg
@@ -37,3 +38,8 @@ Inspiration for background style
 
 Bounce Pad Inspiration:
 Bounce Pad reference image - https://i.ytimg.com/vi/_JtMtnlSFas/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAUQ6YexAVyTyB9LDOmwaIkgspf0g
+
+
+Character References:
+
+All the characters were drawn and animated by Bianca Rizzo.
