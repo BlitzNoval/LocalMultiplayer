@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class PlayerSpawner : MonoBehaviour
 {
     [Header("Spawn Configuration")]
     public GameObject[] playerPrefabs;
     public Transform[] spawnPoints;
+
+    [Header("Cinemachine")]
+    public CinemachineTargetGroup targetGroup;
 
     private List<PlayerInput> spawnedPlayers = new List<PlayerInput>();
 
@@ -21,7 +25,6 @@ public class PlayerSpawner : MonoBehaviour
         SpawnAllPlayers();
     }
 
-
     public void SpawnAllPlayers()
     {
         foreach (var player in spawnedPlayers)
@@ -32,6 +35,15 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
         spawnedPlayers.Clear();
+
+        if (targetGroup != null)
+        {
+            targetGroup.m_Targets = new CinemachineTargetGroup.Target[0];
+        }
+        else
+        {
+            Debug.LogError("CinemachineTargetGroup is not assigned in the Inspector.");
+        }
 
         int playerCount = 0;
 
@@ -55,6 +67,11 @@ public class PlayerSpawner : MonoBehaviour
                 {
                     newPlayer.transform.position = spawnPoints[playerCount].position;
                     spawnedPlayers.Add(newPlayer);
+
+                    if (targetGroup != null)
+                    {
+                        targetGroup.AddMember(newPlayer.transform, 1f, 0f);
+                    }
                 }
                 else
                 {
