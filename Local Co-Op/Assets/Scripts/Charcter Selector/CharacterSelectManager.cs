@@ -62,16 +62,13 @@ public class CharacterSelectManager : MonoBehaviour
     private Coroutine p1SelectingRoutine;
     private Coroutine p2SelectingRoutine;
 
-    // Stores active bounce animations so they can be stopped if re-triggered
     private Dictionary<RectTransform, Coroutine> bounceRoutines = new Dictionary<RectTransform, Coroutine>();
 
-    /// Initializes the array that tracks which characters are taken.
     private void Awake()
     {
         isCharacterTaken = new bool[characters.Length];
     }
 
-    /// Sets up initial UI states, starts "Selecting" text animations
     private void Start()
     {
         UpdatePlayer1UI();
@@ -129,7 +126,6 @@ public class CharacterSelectManager : MonoBehaviour
         }
     }
 
-    /// Allows horizontal navigation if the player is in Selecting state Moves to the next available character index after checking
     private void HandleHorizontalNav(ref int currentIndex, float moveX, int playerNumber)
     {
         PlayerSelectState state = (playerNumber == 1) ? p1State : p2State;
@@ -166,7 +162,6 @@ public class CharacterSelectManager : MonoBehaviour
     }
 
 
-    /// Finds the next free character index in the given direction, skipping those that are already taken so that players can't reselect multiple characters
     private int GetNextAvailableCharacterIndex(int startIndex, int direction)
     {
         int newIndex = startIndex;
