@@ -15,6 +15,9 @@ Main Menu:
 - Game Pad Icon: https://www.flaticon.com/free-icon/gamepad_5448052
 
 
+Font References:
+- Font Meme: Fontmeme.com. (2025). Uplink: Hacker Elite Font. [online] Available at: https://fontmeme.com/uplink-hacker-elite-font/
+
 
 Current Bugs:
 - Player Collison with obstacles 
