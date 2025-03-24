@@ -15,11 +15,49 @@ public class GameLoopManager : MonoBehaviour
     public GameObject gameOverPanel;
     public TextMeshProUGUI winnerText;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI countdownText; // UI TextMeshPro element for the countdown
+
+    [Header("Player Spawner Reference")]
+    public PlayerSpawner playerSpawner; // Assign the PlayerSpawner object in the Inspector
 
     void Start()
     {
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+
+        // Begin with the pre-game countdown.
+        StartCoroutine(PreGameCountdown());
+    }
+
+    IEnumerator PreGameCountdown()
+    {
+        if (countdownText != null)
+            countdownText.gameObject.SetActive(true);
+
+        countdownText.text = "3";
+        yield return new WaitForSeconds(1f);
+
+        countdownText.text = "2";
+        yield return new WaitForSeconds(1f);
+
+        countdownText.text = "1";
+        yield return new WaitForSeconds(1f);
+
+        countdownText.text = "TAG!!!";
+        yield return new WaitForSeconds(1f);
+
+        if (countdownText != null)
+            countdownText.gameObject.SetActive(false);
+
+        // Delay the spawn of players until the countdown finishes.
+        if (playerSpawner != null)
+        {
+            playerSpawner.SpawnAllPlayers();
+        }
+        else
+        {
+            Debug.LogError("PlayerSpawner reference not assigned in GameLoopManager.");
+        }
 
         StartRound();
     }
@@ -69,7 +107,6 @@ public class GameLoopManager : MonoBehaviour
             }
         }
 
-        // If no runner is found, default to a tie.
         if (string.IsNullOrEmpty(winnerDisplay))
             winnerDisplay = "Tie!";
 
