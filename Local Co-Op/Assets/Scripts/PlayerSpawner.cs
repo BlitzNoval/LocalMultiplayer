@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject[] playerPrefabs; // Assign different prefabs for each spawn point in the Inspector
-    public Transform[] spawnPoints;    // Assign spawn points in the Inspector
+    [Header("Spawn Configuration")]
+    public GameObject[] playerPrefabs;
+    public Transform[] spawnPoints;
 
-    private int playerCount = 0;       // Track spawned players
+    private List<PlayerInput> spawnedPlayers = new List<PlayerInput>();
 
     void Start()
     {
@@ -15,12 +17,23 @@ public class PlayerSpawner : MonoBehaviour
             Debug.LogError("Number of player prefabs and spawn points must match.");
             return;
         }
+        
         SpawnAllPlayers();
     }
 
-    void SpawnAllPlayers()
+
+    public void SpawnAllPlayers()
     {
-        playerCount = 0;
+        foreach (var player in spawnedPlayers)
+        {
+            if (player != null)
+            {
+                Destroy(player.gameObject);
+            }
+        }
+        spawnedPlayers.Clear();
+
+        int playerCount = 0;
 
         foreach (InputDevice device in InputSystem.devices)
         {
@@ -32,7 +45,6 @@ public class PlayerSpawner : MonoBehaviour
                     break;
                 }
 
-                // Instantiate player with specific prefab and device
                 PlayerInput newPlayer = PlayerInput.Instantiate(
                     playerPrefabs[playerCount],
                     playerIndex: playerCount,
@@ -42,6 +54,7 @@ public class PlayerSpawner : MonoBehaviour
                 if (newPlayer != null)
                 {
                     newPlayer.transform.position = spawnPoints[playerCount].position;
+                    spawnedPlayers.Add(newPlayer);
                 }
                 else
                 {
