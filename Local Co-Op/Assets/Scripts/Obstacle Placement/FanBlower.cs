@@ -18,7 +18,6 @@ public class FanBlower : MonoBehaviour
             Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                // Apply a continuous force in the blow direction
                 rb.AddForce(blowDirection.normalized * blowForce, ForceMode2D.Force);
             }
         }

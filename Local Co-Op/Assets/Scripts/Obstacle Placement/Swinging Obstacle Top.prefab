@@ -256,7 +256,8 @@ MonoBehaviour:
   amplitude: 60
   swingSpeed: 2
   phaseOffset: 0
-  ballForce: 10
+  ballForce: 30
+  ballTransform: {fileID: 4522916835861356112}
 --- !u!1 &8991406627868985967
 GameObject:
   m_ObjectHideFlags: 0
